@@ -10,6 +10,7 @@ module.exports = {
       black: "#1A1A1A",
       aqua: "#1890FF",
       grass: "#52C41A",
+      white: "#FFFFFF",
     },
     fontFamily: {
       rubik: ["Rubik", "sans-serif"],
