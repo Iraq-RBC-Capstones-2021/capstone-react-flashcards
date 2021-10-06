@@ -6,3 +6,11 @@
 body {
   @apply font-rubik;
 }
+.btn-primary {
+  @apply bg-primary text-white	 border-2 rounded-lg border-primary py-1 px-2.5 filter hover:brightness-95 transition duration-700 ease-in-out;
+}
+
+.btn-secondary {
+  box-shadow: 2px 2px 0px theme("colors.black");
+  @apply bg-white border-2 rounded-lg border-black py-1 px-2.5 hover:bg-gray transition duration-700 ease-in-out;
+}
