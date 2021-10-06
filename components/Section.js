@@ -9,11 +9,13 @@ export default function Section({
   text = "Body placeholder for text paragraph. A paragraph is a self-contained unit of text dealing with a particular point or idea.",
   imageUrl = "/assets/svg/striped-bg.svg",
   url = "/",
+  action = true,
+  reverse = false,
 }) {
   return (
     <div className="grid md:grid-cols-2 max-w-7xl">
       {/* left */}
-      <div className=" flex flex-col justify-center items-center">
+      <div className="  flex flex-col justify-center items-center">
         <div>
           <div className="flex flex-row ">
             <Image
@@ -35,7 +37,7 @@ export default function Section({
             </Link>
             <Image
               src="/assets/svg/section-title-header.svg"
-              alt="black star"
+              alt="section pointer"
               width={16}
               height={16}
             />
@@ -43,7 +45,7 @@ export default function Section({
         </div>
       </div>
       {/* right */}
-      <div className="  flex flex-col justify-center items-center">
+      <div className=" flex flex-col justify-center items-center">
         <div className=" relative my-6 w-8/12	 h-96 border-solid border-2 border-black rounded-md">
           <div className="mx-3 flex">
             <div className=" m-1 w-3 h-3 border border-1 border-black rounded-full"></div>
@@ -57,9 +59,21 @@ export default function Section({
             layout="fill"
             objectFit="contain"
           />
-          <button className=' absolute  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"'>
-            Preview &gt;
-          </button>
+          {action ? (
+            <button className=' absolute  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"'>
+              <Link href={`${url}`}>Preview</Link>
+              {"   "}
+              <Image
+                className=" p-3"
+                src="/assets/svg/icon-play.svg"
+                alt="section pointer"
+                width={16}
+                height={16}
+              />
+            </button>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>
