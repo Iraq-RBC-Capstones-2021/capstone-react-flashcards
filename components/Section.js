@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/dist/client/link";
 import Image from "next/dist/client/image";
-import "tailwindcss/tailwind.css";
 
 export default function Section({
   title = "Main title",
