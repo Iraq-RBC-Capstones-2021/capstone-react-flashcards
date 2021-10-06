@@ -1,102 +1,51 @@
+import Link from "next/link";
+import Image from "next/image";
+import Facebook from "../public/assets/Facebook.svg";
+import Google from "../public/assets/Google.svg";
+import Twitter from "../public/assets/Twitter.svg";
+
 export default function Footer() {
-  let year = new Date().getFullYear();
+  const year = new Date().getFullYear();
 
   return (
-    <footer className="footer bg-white pt-1 text-gray">
+    <footer className="bg-white pt-1 text-gray">
       <div className="container mx-auto px-6 border-t-2">
         <div className="text-center py-6">
           <div className="inline-flex text-black">
-            <a href="" className="px-4">
-              <svg
-                width="22"
-                height="22"
-                viewBox="0 0 22 22"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M0 11.0267C0 4.93684 4.92487 0 11 0C17.0751 0 22 4.93684 22 11.0267C22 16.7478 17.6536 21.4512 12.0904 22C12.1201 21.9948 12.1499 21.9892 12.1796 21.9832V14.1921H15.0394L15.4673 10.8638H12.1796V8.73875C12.1796 7.77507 12.4464 7.11854 13.825 7.11854L15.5831 7.11767V4.1409C15.279 4.10021 14.2355 4.00973 13.0212 4.00973C10.4864 4.00973 8.7508 5.56067 8.7508 8.4093V10.8638H5.88369V14.1921H8.7508V21.8228C3.75441 20.7821 0 16.344 0 11.0267Z"
-                  fill="#1A1A1A"
-                />
-              </svg>
-            </a>
-            <a href="" className="px-4">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M20.0625 3.17268C21.2124 2.93651 22.3463 2.32782 22.3463 2.32782C22.8518 2.09044 23.0409 2.27593 22.7683 2.75418C22.7683 2.75418 22.0877 4.16512 21.0479 4.82046C22.0661 4.69262 22.9852 4.31948 22.9852 4.31948C23.5149 4.13931 23.6577 4.56723 23.311 5C23.311 5 22.4121 6.25248 21.4286 7C21.4371 7.22607 21.441 7.18617 21.441 7.41695C21.441 15.4232 17.4008 22.5 7.11697 22.5C3.25222 22.5 1.18318 20.9666 1.18318 20.9666C0.185012 20.4585 0.298323 19.8655 1.4073 19.6996C1.4073 19.6996 5.13039 19.3451 6.85292 17.9227C-3 13 1.01874 3.46925 1.01874 3.46925C1.05737 2.91996 1.43722 2.78005 1.84403 3.16555C1.84403 3.16555 6.27861 7.78701 11.4852 8.00838C11.3987 7.62015 11.3555 7.21712 11.3555 6.8013C11.3555 3.87378 13.61 1.5 16.3881 1.5C17.8374 1.5 19.1465 2.14323 20.0625 3.17268Z"
-                  fill="#1A1A1A"
-                />
-                <mask
-                  id="mask0"
-                  style={{ maskType: "alpha" }}
-                  maskUnits="userSpaceOnUse"
-                  x="0"
-                  y="1"
-                  width="24"
-                  height="22"
-                >
-                  <path
-                    d="M20.0625 3.17268C21.2124 2.93651 22.3463 2.32782 22.3463 2.32782C22.8518 2.09044 23.0409 2.27593 22.7683 2.75418C22.7683 2.75418 22.0877 4.16512 21.0479 4.82046C22.0661 4.69262 22.9852 4.31948 22.9852 4.31948C23.5149 4.13931 23.6577 4.56723 23.311 5C23.311 5 22.4121 6.25248 21.4286 7C21.4371 7.22607 21.441 7.18617 21.441 7.41695C21.441 15.4232 17.4008 22.5 7.11697 22.5C3.25222 22.5 1.18318 20.9666 1.18318 20.9666C0.185012 20.4585 0.298323 19.8655 1.4073 19.6996C1.4073 19.6996 5.13039 19.3451 6.85292 17.9227C-3 13 1.01874 3.46925 1.01874 3.46925C1.05737 2.91996 1.43722 2.78005 1.84403 3.16555C1.84403 3.16555 6.27861 7.78701 11.4852 8.00838C11.3987 7.62015 11.3555 7.21712 11.3555 6.8013C11.3555 3.87378 13.61 1.5 16.3881 1.5C17.8374 1.5 19.1465 2.14323 20.0625 3.17268Z"
-                    fill="white"
-                  />
-                </mask>
-                <g mask="url(#mask0)"></g>
-              </svg>
-            </a>
-            <a href="" className="px-4">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M12.1549 9.82176V13.1768C12.1549 13.7297 12.6022 14.1776 13.155 14.1769C14.5301 14.1751 16.9719 14.1722 18.1853 14.1722C17.2401 16.9969 15.771 18.5347 12.1549 18.5347C8.49517 18.5347 5.63879 15.609 5.63879 11.9996C5.63879 8.39102 8.49517 5.46528 12.1549 5.46528C14.0896 5.46528 15.3393 6.1361 16.4855 7.0708C17.4029 6.16609 17.3263 6.03672 19.6605 3.86234C17.6788 2.08376 15.0452 1 12.1549 1C5.99475 1 1 5.92449 1 11.9996C1 18.0747 5.99475 23 12.1549 23C21.3628 23 23.6134 15.0932 22.8676 9.82176H12.1549Z"
-                  fill="#1A1A1A"
-                />
-                <mask
-                  id="mask0"
-                  style={{ maskType: "alpha" }}
-                  maskUnits="userSpaceOnUse"
-                  x="1"
-                  y="1"
-                  width="22"
-                  height="22"
-                >
-                  <path
-                    d="M12.1549 9.82176V13.1768C12.1549 13.7297 12.6022 14.1776 13.155 14.1769C14.5301 14.1751 16.9719 14.1722 18.1853 14.1722C17.2401 16.9969 15.771 18.5347 12.1549 18.5347C8.49517 18.5347 5.63879 15.609 5.63879 11.9996C5.63879 8.39102 8.49517 5.46528 12.1549 5.46528C14.0896 5.46528 15.3393 6.1361 16.4855 7.0708C17.4029 6.16609 17.3263 6.03672 19.6605 3.86234C17.6788 2.08376 15.0452 1 12.1549 1C5.99475 1 1 5.92449 1 11.9996C1 18.0747 5.99475 23 12.1549 23C21.3628 23 23.6134 15.0932 22.8676 9.82176H12.1549Z"
-                    fill="white"
-                  />
-                </mask>
-                <g mask="url(#mask0)"></g>
-              </svg>
-            </a>
+            <Link href="https://www.facebook.com">
+              <a target="_blank" rel="noopener noreferrer" className="px-4">
+                <Image src={Facebook} alt="facebook" width="24" />
+              </a>
+            </Link>
+            <Link href="https://twitter.com">
+              <a target="_blank" rel="noopener noreferrer" className="px-4">
+                <Image src={Twitter} alt="twitter" width="24" />
+              </a>
+            </Link>
+            <Link href="https://mail.google.com">
+              <a target="_blank" rel="noopener noreferrer" className="px-4">
+                <Image src={Google} alt="google" width="24" />
+              </a>
+            </Link>
           </div>
 
           <div className="flex justify-center py-6 font-medium text-black">
             <div className="inline-flex">
-              <a href="" className="px-4">
-                Home
-              </a>
-              <a href="" className="px-4">
-                Categories
-              </a>
-              <a href="" className="px-4">
-                Profile
-              </a>
-              <a href="" className="px-4">
-                Developers
-              </a>
-              <a href="" className="px-4">
-                About
-              </a>
+              <Link href="/">
+                <a className="px-4">Home</a>
+              </Link>
+              <Link href="/categories">
+                <a className="px-4">Categories</a>
+              </Link>
+              <Link href="/profile">
+                <a className="px-4">Profile</a>
+              </Link>
+              <Link href="/developers">
+                <a className="px-4">Developers</a>
+              </Link>
+              <Link href="/about">
+                <a className="px-4">About</a>
+              </Link>
             </div>
           </div>
           <p className="text-sm text-black text-opacity-50 font-medium mb-2">
