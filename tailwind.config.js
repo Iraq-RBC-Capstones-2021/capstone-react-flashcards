@@ -17,7 +17,7 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: { brightness: ["responsive", "hover"] },
   },
   plugins: [],
 };
