@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-export default function notFound() {
+export default function NotFound() {
   return (
     <div className="flex flex-col justify-center items-center w-screen h-screen">
       <h1 className="font-semibold text-2xl">404</h1>
@@ -9,9 +9,7 @@ export default function notFound() {
         Sorry, the page you wanted was not found. try serching for something
         else.
       </p>
-      <button className="shadow-lg my-2 px-3 py-1.5 font-semibold text-base border-black border-solid border-2 rounded-lg ">
-        <Link href="/">Go To Home</Link>
-      </button>
+      <button className="btn-secondary my-3">Go To Home</button>
     </div>
   );
 }
