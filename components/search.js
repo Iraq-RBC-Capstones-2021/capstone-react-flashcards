@@ -1,7 +1,7 @@
 function Search() {
   return (
-    <div className="relative flex flex-wrap items-stretch m-4">
-      <span className="z-10 px-2 content-center self-center leading-snug text-center absolute bg-transparent rounded text-base items-center justify-center">
+    <div className="flex items-center mx-4">
+      <span className="z-10 px-2 content-center self-center leading-snug text-center absolute rounded justify-center">
         <svg
           width="23"
           height="23"
