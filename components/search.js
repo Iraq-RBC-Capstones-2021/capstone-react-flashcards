@@ -18,7 +18,7 @@ function Search() {
       <input
         type="text"
         placeholder="Search Study Sets"
-        className="px-2 py-0 placeholder-gray-400 text-gray-600 relative bg-white rounded border-black border-2 focus:outline-none focus:ring w-full pl-10"
+        className="px-2 py-0 placeholder-gray-400 text-gray-600 relative rounded border-black border-2 focus:ring focus:ring-gray w-full pl-10"
       />
     </div>
   );
