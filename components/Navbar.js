@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Search from "./search";
-import Image from "next/image";
 
 function Navbar() {
   return (
@@ -51,9 +50,9 @@ function Navbar() {
         </Link>
 
         {/* nav links */}
-        <div className="flex flex-row items-center space-x-1">
+        <div className="hidden lg:flex lg:flex-row items-center space-x-1">
           <Link href="/">
-            <a className="hidden lg:flex py-1 px-2 hover:bg-gray rounded-lg transition duration-300">
+            <a className="py-1 px-2 hover:bg-gray rounded-lg transition duration-300">
               Home
             </a>
           </Link>
@@ -75,22 +74,72 @@ function Navbar() {
           </Link>
         </div>
 
-        <Search />
+        {/* search box */}
+        <div className="flex items-center mx-4">
+          <Search />
+        </div>
 
         {/* other nav links */}
-        <div className="flex items-center space-x-3 ">
+        <div className="hidden lg:flex items-center space-x-3 ">
           <Link href="/register">
             <a className="py-1 px-2 font-medium rounded border-2 border-black border-box">
               Register
             </a>
           </Link>
-          <a
-            href="/signin"
-            className="py-1 px-2 font-medium text-white bg-primary rounded hover:bg-green-400 transition duration-300"
-          >
+          <Link href="/signin">
+            <a className="py-1 px-2 font-medium text-white bg-primary rounded hover:bg-green-400 transition duration-300">
+              Sign in
+            </a>
+          </Link>
+        </div>
+
+        {/* mobile menu icon */}
+        <div className="block lg:hidden align-middle align-center m-auto ml-96">
+          <button className="px-3 py-2 border rounded text-black border-black hover:text-primary hover:border-primary">
+            <svg
+              className="fill-current h-3 w-3"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <title>Menu</title>
+              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* mobile view */}
+      <div className="w-full block lg:hidden border-b border-gray pb-2">
+        <Link href="/">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+            Home
+          </a>
+        </Link>
+        <Link href="/categories">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+            Categories
+          </a>
+        </Link>
+        <Link href="/library">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+            My library
+          </a>
+        </Link>
+        <Link href="/new">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+            Create
+          </a>
+        </Link>
+        <Link href="/register">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+            Register
+          </a>
+        </Link>
+        <Link href="/signin">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
             Sign in
           </a>
-        </div>
+        </Link>
       </div>
     </nav>
   );

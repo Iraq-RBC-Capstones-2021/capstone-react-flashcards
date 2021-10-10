@@ -1,6 +1,6 @@
 function Search() {
   return (
-    <div className="flex items-center mx-4">
+    <div>
       <span className="z-10 px-2 content-center self-center leading-snug text-center absolute rounded justify-center">
         <svg
           width="23"
