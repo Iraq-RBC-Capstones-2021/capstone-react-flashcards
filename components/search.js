@@ -1,4 +1,10 @@
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 function Search() {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+
   return (
     <div>
       <span className="z-10 px-2 content-center self-center leading-snug text-center absolute rounded justify-center">
@@ -15,11 +21,14 @@ function Search() {
           />
         </svg>
       </span>
-      <input
-        type="text"
-        placeholder="Search Study Sets"
-        className="px-2 py-0 placeholder-gray-400 text-gray-600 relative rounded border-black border-2 focus:ring focus:ring-gray w-full pl-10"
-      />
+      <form onSubmit={(event) => router.push(`/search/${search}`)}>
+        <input
+          type="text"
+          placeholder="Search Study Sets"
+          onChange={(event) => setSearch(event.target.value)}
+          className="px-2 py-0 placeholder-gray-400 text-gray-600 relative rounded border-black border-2 focus:ring focus:ring-gray w-full pl-10"
+        />
+      </form>
     </div>
   );
 }
