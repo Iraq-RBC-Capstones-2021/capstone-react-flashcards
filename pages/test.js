@@ -1,4 +1,4 @@
-import Section from "../components/Section2";
+import Section from "../components/Section";
 import Image from "next/dist/client/image";
 import Link from "next/dist/client/link";
 
