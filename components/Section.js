@@ -14,8 +14,8 @@ export default function Section({
   return (
     // Let's divide the component into 2 panes using flex and wrap it on smaller screens
     <div
-      className="grid grid-cols-1 md:grid-cols-2 items-center justify-center min-w-min p-4"
-      style={{ width: 800 }}
+      className="grid grid-cols-1 md:grid-cols-2 items-center justify-center min-w-min py-4 w-full mx-auto"
+      style={{ minWidth: 600, minHeight: 350 }}
     >
       {/* left segment is for title and children */}
       <div className="flex flex-col py-3">
@@ -25,12 +25,12 @@ export default function Section({
       </div>
 
       {/* right segment is for image or video */}
-      <div className="w-full h-full mx-3">
+      <div className="w-full h-full">
         {isVideo ? (
           <WindowPane video={video} />
         ) : (
           <div
-            className="w-full h-full bg-center bg-contain"
+            className="w-full h-full bg-right bg-contain bg-no-repeat"
             style={{ backgroundImage: `url(${image})` }}
           />
         )}
@@ -43,12 +43,18 @@ const Title = ({ title, titleDesc, titleIcon }) => {
   return (
     <div className="flex items-center">
       {/* Icon segment */}
-      <div className="mr-3">
-        <Image src={titleIcon} width="38" height="38" alt="Title Icon" />
-      </div>
+      {titleIcon ? (
+        <div className="mr-3">
+          <Image src={titleIcon} width="38" height="38" alt="Title Icon" />
+        </div>
+      ) : (
+        <></>
+      )}
       {/* Title Segment */}
       <div>
-        <h2 className={titleIcon ? "text-sm" : "text-lg"}>{title}</h2>
+        <h2 className={`font-semibold ${titleIcon ? "text-sm" : "text-xl"}`}>
+          {title}
+        </h2>
         <h3 className="text-gray-400 text-sm">{titleDesc}</h3>
       </div>
     </div>
