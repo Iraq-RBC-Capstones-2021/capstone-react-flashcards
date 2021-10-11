@@ -1,132 +1,111 @@
-import React from "react";
-import Link from "next/dist/client/link";
+import React, { useRef, useState } from "react";
 import Image from "next/dist/client/image";
 
 export default function Section({
-  title = "Main title",
-  short,
-  text = "Body placeholder for text paragraph. A paragraph is a self-contained unit of text dealing with a particular point or idea.",
-  imageUrl = "/assets/svg/striped-bg.svg", // preferred aspect ratio = 1.35
-  actionUrl = "/",
-  action = false,
-  star = false,
-  frame = false,
-  reverse = false,
-  additionalFeatures = false,
-  additionalFeatureOne = {
-    title: "Feature name",
-    short: "Short description",
-  },
-  additionalFeatureTwo = {
-    title: "Feature name",
-    short: "Short description",
-  },
+  title,
+  titleDesc,
+  titleIcon,
+  desc,
+  isVideo = false,
+  video,
+  image,
+  children,
 }) {
   return (
-    <div className="grid w-11/12 md:w-3/4 md:grid-cols-2 md:min-h-500 justify-center content-center ">
-      {/* left */}
-      <div className=" flex flex-col justify-center items-center ">
-        <div>
-          <div className="flex flex-row ">
-            {star ? (
-              <Image
-                src="/assets/svg/star.svg"
-                alt="black star"
-                width={32}
-                height={32}
-              />
-            ) : null}
-            <div className={`${star ? "ml-3" : ""}`}>
-              <h1 className={`${short ? "" : "text-2xl"}  font-bold`}>
-                {title}
-              </h1>
-              <h1 className=" text-gray-500 text-sm">{short}</h1>
-            </div>
-          </div>
-          <p className=" max-w-xs py-2 text-gray-500 text-sm">{text}</p>
-          {/* additional features */}
-          {additionalFeatures ? (
-            <div className="flex flex-row">
-              <div className="py-3 mr-10">
-                <Image
-                  src="/assets/svg/star.svg"
-                  alt="black star"
-                  width={32}
-                  height={32}
-                />
-                <h1 className="font-bold mt-3">{additionalFeatureOne.title}</h1>
-                <h1 className=" text-gray-500 text-sm mt-2">
-                  {additionalFeatureOne.short}
-                </h1>
-              </div>
-              <div className="py-3">
-                <Image
-                  src="/assets/svg/star.svg"
-                  alt="black star"
-                  width={32}
-                  height={32}
-                />
-                <h1 className="font-bold mt-3">{additionalFeatureTwo.title}</h1>
-                <h1 className=" text-gray-500 text-sm mt-2">
-                  {additionalFeatureTwo.short}
-                </h1>
-              </div>
-            </div>
-          ) : null}
-          {action ? (
-            <div className="py-2 flex mb-6">
-              <Link href={`${actionUrl}`}>
-                <span className="font-bold mr-2 ">Learn more</span>
-              </Link>
-              <Image
-                src="/assets/svg/section-title-header.svg"
-                alt="section pointer"
-                width={16}
-                height={16}
-              />
-            </div>
-          ) : null}
-        </div>
-      </div>
-      {/* right */}
+    // Let's divide the component into 2 panes using flex and wrap it on smaller screens
+    <>
       <div
-        className={`${
-          reverse ? "order-first" : ""
-        }  flex flex-col justify-center items-center   `}
+        className="grid grid-cols-1 md:grid-cols-2 items-center justify-center min-w-min p-4"
+        style={{ width: 800 }}
       >
-        <div
-          className={`${
-            frame
-              ? "border border-solid border-5 border-black rounded-lg "
-              : null
-          } relative overflow-hidden`}
-        >
-          {frame ? (
-            <div className="mx-3 flex">
-              <div className=" m-1 w-3 h-3 border border-1 border-black rounded-full"></div>
-              <div className=" m-1 w-3 h-3 border border-1 border-black rounded-full"></div>
-              <div className=" m-1 w-3 h-3 border border-1 border-black rounded-full"></div>
-            </div>
-          ) : null}
-          <img src={`${imageUrl}`} alt="feater description" className="" />
+        {/* left segment is for title and children */}
+        <div className="flex flex-col py-3">
+          <Title title={title} titleDesc={titleDesc} titleIcon={titleIcon} />
+          <p className="my-6 text-sm text-gray-400">{desc}</p>
+          {children}
+        </div>
 
-          {action ? (
-            <button className="btn-secondary absolute  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <Link href={`${actionUrl}`}>Preview</Link>
-              {"   "}
-              <Image
-                className=" p-3"
-                src="/assets/svg/icon-play.svg"
-                alt="section pointer"
-                width={16}
-                height={16}
-              />
-            </button>
+        {/* right segment is for image or video */}
+        <div className="w-full h-full mx-3">
+          {isVideo ? (
+            <WindowPane video={video} />
           ) : (
-            ""
+            <div
+              className="w-full h-full bg-center bg-contain"
+              style={{ backgroundImage: `url(${image})` }}
+            />
           )}
         </div>
       </div>
-    </div>
+      ]{" "}
+    </>
   );
 }
+
+const Title = ({ title, titleDesc, titleIcon }) => {
+  return (
+    <div className="flex items-center">
+      {/* Icon segment */}
+      <div className="mr-3">
+        <Image src={titleIcon} width="38" height="38" alt="Title Icon" />
+      </div>
+      {/* Title Segment */}
+      <div>
+        <h2 className={titleIcon ? "text-sm" : "text-lg"}>{title}</h2>
+        <h3 className="text-gray-400 text-sm">{titleDesc}</h3>
+      </div>
+    </div>
+  );
+};
+
+const WindowPane = ({ video }) => {
+  const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef(null);
+
+  const playVideo = (e) => {
+    setShowVideo(true);
+    videoRef.current.src = video;
+  };
+
+  return (
+    <div className="flex flex-col w-full h-full">
+      <div className="flex-shrink-0 h-6 border-l-2 border-r-2 border-t-2 border-black rounded-t-lg py-1 flex items-center px-2">
+        <div className="border-2 border-black rounded-full w-3 h-3 mr-1" />
+        <div className="border-2 border-black rounded-full w-3 h-3 mr-1" />
+        <div className="border-2 border-black rounded-full w-3 h-3" />
+      </div>
+      <div
+        className="flex-grow border-l-2 border-r-2 border-b-2 border-black rounded-b-lg flex items-center justify-center"
+        style={{
+          background: `repeating-linear-gradient(
+          -55deg,
+          #fbede6,
+          #fbede6 6px,
+          #fff 6px,
+          #fff 7px
+        )`,
+        }}
+      >
+        <button
+          className={`btn-secondary flex items-center ${
+            showVideo ? "hidden" : ""
+          }`}
+          onClick={playVideo}
+        >
+          <span className="mr-3">Preview</span>
+          <Image
+            src="/assets/svg/ic_play.svg"
+            alt="play video"
+            width="18"
+            height="18"
+          />
+        </button>
+        <video
+          ref={videoRef}
+          className={`w-full h-full ${showVideo ? "" : "hidden"}`}
+          muted
+        />
+      </div>
+    </div>
+  );
+};
