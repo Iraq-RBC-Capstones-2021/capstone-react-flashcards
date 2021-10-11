@@ -4,7 +4,7 @@ import Search from "./search";
 function Navbar() {
   return (
     <nav>
-      <div className="flex flex-row py-2 border-b border-gray">
+      <div className="flex flex-row py-2 border-b border-gray justify-between">
         {/* logo */}
         <Link href="/">
           <a className="flex items-center pr-4">

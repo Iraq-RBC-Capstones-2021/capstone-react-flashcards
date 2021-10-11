@@ -6,8 +6,8 @@ function Search() {
   const [search, setSearch] = useState("");
 
   return (
-    <div>
-      <span className="z-10 px-2 content-center self-center leading-snug text-center absolute rounded justify-center">
+    <div className="relative">
+      <span className="absolute z-10 top-1 left-3">
         <svg
           width="23"
           height="23"
@@ -21,12 +21,12 @@ function Search() {
           />
         </svg>
       </span>
-      <form onSubmit={(event) => router.push(`/search/${search}`)}>
+      <form onSubmit={() => router.push(`/search/${search}`)}>
         <input
           type="text"
           placeholder="Search Study Sets"
           onChange={(event) => setSearch(event.target.value)}
-          className="px-2 py-0 placeholder-gray-400 text-gray-600 relative rounded border-black border-2 focus:ring focus:ring-gray w-full pl-10"
+          className="pr-2 py-0 placeholder-gray-400 text-gray-600 rounded border-black border-2 focus:ring ring-gray-500 w-full pl-10"
         />
       </form>
     </div>
