@@ -7,7 +7,7 @@ function Navbar() {
       <div className="flex flex-row py-2 border-b border-gray">
         {/* logo */}
         <Link href="/">
-          <a className="flex items-center">
+          <a className="flex items-center pr-4">
             <svg
               width="125"
               height=""
@@ -50,7 +50,7 @@ function Navbar() {
         </Link>
 
         {/* nav links */}
-        <div className="hidden lg:flex lg:flex-row items-center space-x-1">
+        <div className="hidden lg:flex lg:flex-row items-center space-x-2">
           <Link href="/">
             <a className="py-1 px-2 hover:bg-gray rounded-lg transition duration-300">
               Home
@@ -68,8 +68,7 @@ function Navbar() {
           </Link>
           <Link href="/new">
             <a className="py-1 px-2 text-white bg-primary rounded-lg">
-              <b>&#43;</b>
-              <span className="hidden md:inline"> Create</span>
+              <b>+</b> Create
             </a>
           </Link>
         </div>
