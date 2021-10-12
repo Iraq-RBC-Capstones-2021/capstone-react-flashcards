@@ -3,6 +3,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      height: {
+        "70v": "70vh",
+      },
       colors: {
         primary: "#FF886C",
         accent: "#FBEDE6",
