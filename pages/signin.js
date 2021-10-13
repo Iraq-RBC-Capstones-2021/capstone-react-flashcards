@@ -42,7 +42,7 @@ const Signin = () => {
                   pattern: /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
                   required: true,
                 })}
-                placeholder="use@flashcard.com"
+                placeholder="john@example.com"
               />
               <br />
               {errors.email && errors.email.type === "pattern" && (
@@ -82,11 +82,11 @@ const Signin = () => {
               )}
             </div>
             <button className="btn-primary w-full block text-center">
-              Login In
+              Log in
             </button>
           </form>
           {/** link to sign up page */}
-          <Link href="/Signup">
+          <Link href="/register">
             <a className="inline-block text-grey hover:underline mt-2 mb-4 w-full sm:mb-3">
               {" "}
               Don`t Have an Account ? Sign up

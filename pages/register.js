@@ -37,7 +37,7 @@ const Signup = () => {
                 className=" w-full border-2 border-black outline-none rounded-md  p-2 focus:border-primary"
                 name="name"
                 id="name"
-                placeholder="User"
+                placeholder="Username"
                 {...register("name", { required: true, maxLength: 30 })}
               />
               <br />
@@ -57,7 +57,7 @@ const Signup = () => {
                 className=" w-full border-2 border-black outline-none rounded-md  p-2 focus:border-primary"
                 name="email"
                 id="email"
-                placeholder="use@flashcard.com"
+                placeholder="john@example.com"
                 {...register("email", {
                   pattern: /^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
                   required: true,
@@ -105,7 +105,7 @@ const Signup = () => {
           </form>
 
           {/** link to sign up page */}
-          <Link href="/Signin">
+          <Link href="/signin">
             <a className="inline-block text-grey hover:underline mt-5 w-full sm:mb-3">
               {" "}
               Already Have an Account? Sign In
