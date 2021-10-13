@@ -80,12 +80,12 @@ function Navbar() {
 
         {/* other nav links */}
         <div className="hidden lg:flex items-center space-x-3 ">
-          <Link href="/Signup">
+          <Link href="/register">
             <a className="py-1 px-2 font-medium rounded border-2 border-black border-box">
               Register
             </a>
           </Link>
-          <Link href="/Signin">
+          <Link href="/signin">
             <a className="py-1 px-2 font-medium text-white bg-primary rounded hover:bg-green-400 transition duration-300">
               Sign in
             </a>
