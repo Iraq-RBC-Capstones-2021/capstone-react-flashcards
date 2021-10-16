@@ -8,7 +8,8 @@ export default function Search() {
   const { userSearch: search } = router.query;
   const results = fakeResults; // assuming replace with redux functionality or api calls
 
-  const [displayResults, setDisplayResults] = useState(results);
+  const [filteredResults, setFilteredResults] = useState(results);
+  const [resultsPerPage, setResultsPerPage] = useState(9);
 
   return (
     <div>
@@ -23,7 +24,7 @@ export default function Search() {
             Search results for &quot;<strong>{search}</strong>&quot; :
           </p>
           <div className=" pt-4 grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-8   max-w-full  ">
-            {displayResults.map((cardInfo, index) => {
+            {filteredResults.slice(0, resultsPerPage).map((cardInfo, index) => {
               return (
                 <div className=" max-w-xs" key={index}>
                   {" "}
@@ -33,8 +34,13 @@ export default function Search() {
             })}
           </div>
           <div className="col-span-full flex content-center items-center justify-center my-8">
-            <button className="btn-secondary" onClick={() => ""}>
-              Load more
+            <button
+              className="btn-secondary"
+              onClick={() => setResultsPerPage((prev) => prev + 9)}
+            >
+              {resultsPerPage > filteredResults.length
+                ? "No more results"
+                : "Load more"}
             </button>
           </div>
         </div>
@@ -181,7 +187,7 @@ const cardOne = {
 };
 const fakeResults = [];
 
-for (let index = 0; index < 20; index++) {
+for (let index = 0; index < 30; index++) {
   fakeResults.push({
     title: Math.ceil(Math.random() * 1000) + ": Common French words",
     userName: "James joins",
