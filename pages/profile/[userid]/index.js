@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Avatar from "../../../public/assets/Avatar.png";
-import Card from "../../../components/card";
+import Card from "../../../components/Card";
 
 const Profile = ({ userInfo }) => {
   //we can add the user obeject into an array and map it to display card
