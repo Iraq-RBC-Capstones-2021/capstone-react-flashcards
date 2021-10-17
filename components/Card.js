@@ -24,7 +24,7 @@ export default function Card({
   return (
     <div
       className="group block relative overflow-hidden rounded-3xl shadow-xl
-        h-60 w-60  sm:h-72 md:h-80 xl:h-96 sm:w-72 md:w-80 xl:w-96
+    lg:m-9 m-4 h-60 w-60  sm:h-72 md:h-80 xl:h-96 sm:w-72 md:w-80 xl:w-96
       "
     >
       <div>
