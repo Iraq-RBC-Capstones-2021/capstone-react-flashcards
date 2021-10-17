@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Card from "../../components/card";
+import { Range } from "rc-slider";
+import "rc-slider/assets/index.css";
 
 export default function Search() {
   const router = useRouter();
@@ -10,11 +12,18 @@ export default function Search() {
 
   const [filteredResults, setFilteredResults] = useState(results);
   const [resultsPerPage, setResultsPerPage] = useState(9);
+  const [biggestCardCount] = useState(() => {
+    const newArray = filteredResults.sort((a, b) => a.cardCount - b.cardCount);
+    return newArray[newArray.length - 1].cardCount;
+  });
   const [filters, setFilters] = useState({
     filtered: false,
     order: "descend" || "ascend",
     sortBy: "numOfCards" || "ratings",
-    numOfCardsBetween: { start: 0, end: "max" },
+  });
+  const [numOfCardsBetween, setNumOfCardsBetween] = useState({
+    start: 0,
+    end: biggestCardCount,
   });
 
   useEffect(() => {
@@ -118,10 +127,37 @@ export default function Search() {
                 </div>
               </form>
             </div>
-
+            {/* range slider */}
             <div className="mt-3">
               <p>Number of cards:</p>
-              <RangeSlider />
+              <div className="flex mt-3">
+                <p className="mr-4">{numOfCardsBetween.start}</p>
+                <div className=" w-20">
+                  <Range
+                    onAfterChange={(value) =>
+                      setNumOfCardsBetween((prev) => {
+                        return { ...prev, start: value[0], end: value[1] };
+                      })
+                    }
+                    min={0}
+                    max={biggestCardCount}
+                    count={1}
+                    defaultValue={[0, biggestCardCount]}
+                    pushable
+                    trackStyle={[{ backgroundColor: "#FF886C" }]}
+                    handleStyle={[
+                      { backgroundColor: "#FF886C" },
+                      { backgroundColor: "#FF886C" },
+                    ]}
+                    railStyle={{ backgroundColor: "gray" }}
+                  />
+                </div>
+                <p className="ml-4">
+                  {numOfCardsBetween.end === biggestCardCount
+                    ? "MAX"
+                    : numOfCardsBetween.end}
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -131,11 +167,14 @@ export default function Search() {
             Search results for &quot;<strong>{search}</strong>&quot; :
           </p>
           <div className=" pt-4 grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-8">
+            {!filteredResults || filteredResults.length === 0 ? (
+              <NoResults message={search} />
+            ) : null}
             {filteredResults.slice(0, resultsPerPage).map((cardInfo, index) => {
               return (
                 <div className=" max-w-xs" key={index}>
                   {" "}
-                  <Card {...cardInfo} /> {cardInfo.rating}
+                  <Card {...cardInfo} />
                 </div>
               );
             })}
@@ -159,72 +198,21 @@ export default function Search() {
 function NoResults({ message }) {
   return (
     <div className="text-xl">
-      Sorry no results found for {message}. Try searching for different
-      keywords.
+      Sorry no results found for{" "}
+      <strong>
+        <i> {message} </i>{" "}
+      </strong>
+      . Try searching for different keywords.
     </div>
   );
 }
 
-function RangeSlider() {
-  return (
-    <div className="mt-2 flex items-center ">
-      <span className="mr-3">0</span>
-      <div
-        style={{
-          width: "150px",
-          minWidth: "150px",
-          height: "16px",
-          maxHeight: "16px",
-          border: "solid black 3px",
-          borderRadius: "10px",
-          position: "relative",
-        }}
-      >
-        {/* left handle */}
-        <div
-          className=" cursor-pointer"
-          style={{
-            height: "24px",
-            width: "24px",
-            outline: "solid black 3px",
-            backgroundColor: "white",
-            borderRadius: "100%",
-            position: "absolute",
-            top: "-6px",
-            left: "20%",
-          }}
-        ></div>
-        {/* right handle */}
-        <div
-          className=" cursor-pointer"
-          style={{
-            height: "24px",
-            width: "24px",
-            outline: "solid black 3px",
-            backgroundColor: "white",
-            borderRadius: "100%",
-            position: "absolute",
-            top: "-6px",
-            left: "60%",
-          }}
-        ></div>
-      </div>
-      <span className="ml-3">MAX</span>
-    </div>
-  );
-}
-
-// just for testing
+// required set properties are cardCount, rating
 const fakeResults = [];
 
-for (let index = 0; index < 30; index++) {
+for (let index = 0; index < 100; index++) {
   fakeResults.push({
-    title: Math.ceil(Math.random() * 1000) + ": Common French words",
-    userName: "James joins",
-    cardCount: Math.ceil(Math.random() * 1000),
-    tags: ["french", "languages", "beginner"],
-    description:
-      "Must know french words even for none french learners because they are every where.",
+    cardCount: Math.ceil(Math.random() * 5000),
     rating: Math.ceil(Math.random() * 5),
   });
 }
