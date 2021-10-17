@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import imagePlaceHolder from "../public/assets/image_place_holder.png";
 import avatarPlaceHolder from "../public/assets/Avatar.png";
-import Tag from "./tag";
+import Tag from "./Tag";
 
 const tempTags = ["English", "Learning", "English", "English"];
 

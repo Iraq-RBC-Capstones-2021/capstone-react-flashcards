@@ -4,7 +4,7 @@ import Underline from "@tiptap/extension-underline";
 import TextStyle from "@tiptap/extension-text-style";
 import Color from "@tiptap/extension-color";
 
-import EditorOption from "./editorOption";
+import EditorOption from "./EditorOption";
 import codeSvg from "../public/assets/text--code.svg";
 import imageSvg from "../public/assets/text-image.svg";
 import audioSvg from "../public/assets/text--audio.svg";

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import Search from "./search";
+
+import Search from "./Search";
 
 function Navbar() {
   return (

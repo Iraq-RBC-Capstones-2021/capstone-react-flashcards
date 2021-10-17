@@ -1,5 +1,5 @@
 import Section from "../components/Section";
-import UserCard from "../components/userCard";
+import UserCard from "../components/UserCard";
 import data from "../users.json";
 
 export default function About() {
@@ -58,3 +58,4 @@ export default function About() {
     </div>
   );
 }
+
