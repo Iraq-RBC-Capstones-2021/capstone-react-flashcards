@@ -1,8 +1,4 @@
-import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import TextStyle from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
+import { EditorContent } from "@tiptap/react";
 
 import EditorOption from "./EditorOption";
 import codeSvg from "../public/assets/text--code.svg";
@@ -16,39 +12,7 @@ import headingSvg from "../public/assets/text--heading.svg";
 import undoSvg from "../public/assets/text--undo.svg";
 import redoSvg from "../public/assets/text--redo.svg";
 
-export default function Editor({
-  content = "<p> Content </p>",
-  onContentChange = () => {},
-}) {
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        code: {
-          HTMLAttributes: {
-            class: "bg-black text-primary rounded-sm px-2",
-          },
-        },
-        heading: {
-          HTMLAttributes: {
-            class: "text-xl",
-          },
-        },
-      }),
-      Underline,
-      TextStyle,
-      Color,
-    ],
-    content,
-    editorProps: {
-      attributes: {
-        class:
-          "w-96 h-64 border-2 p-1 rounded-br-2xl focus-within:border-primary outline-none",
-      },
-    },
-
-    onUpdate: ({ editor }) => onContentChange(editor),
-  });
-
+export default function Editor({ editor }) {
   if (!editor) return null;
 
   return (
