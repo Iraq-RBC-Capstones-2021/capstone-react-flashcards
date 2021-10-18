@@ -35,5 +35,8 @@ module.exports = {
       animation: ["hover", "focus", "group-hover"],
     },
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("@tailwindcss/custom-forms"),
+  ],
 };
