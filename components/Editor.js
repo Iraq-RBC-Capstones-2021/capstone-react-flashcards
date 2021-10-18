@@ -17,7 +17,7 @@ export default function Editor({ editor }) {
 
   return (
     <div>
-      <div className="flex w-96 items-center  rounded-tl-2xl border-t-2 border-l-2 border-r-2 overflow-hidden">
+      <div className="flex w-96 md:w-128 items-center border-black  rounded-tl-2xl border-t-2 border-l-2 border-r-2 overflow-hidden">
         <EditorOption
           isActive={editor.isActive("heading")}
           icon={headingSvg}

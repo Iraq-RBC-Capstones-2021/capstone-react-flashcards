@@ -27,7 +27,7 @@ const useCardEditor = (content, { ...settings }) => {
     editorProps: {
       attributes: {
         class:
-          "w-96 h-64 border-2 border-black p-1 rounded-br-2xl focus-within:border-primary outline-none",
+          "w-96 h-64 md:w-128 border-2 border-black p-1 rounded-br-2xl focus-within:border-primary outline-none",
       },
     },
     ...settings,
