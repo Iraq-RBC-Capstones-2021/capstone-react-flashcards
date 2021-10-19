@@ -61,7 +61,11 @@ export default function Card({
             "
           >
             <Link href={`/sets/${setId}`} passHref>
-              <h1 className="cursor-pointer text-lg md:text-2xl group-hover:animate-marquee whitespace-nowrap">
+              <h1
+                className={`cursor-pointer text-lg md:text-2xl ${
+                  title.length >= 25 ? "group-hover:animate-marquee" : ""
+                }  whitespace-nowrap`}
+              >
                 {title}
               </h1>
             </Link>
