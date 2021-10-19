@@ -63,3 +63,19 @@ body {
 .color-input::-moz-color-swatch {
   @apply border-none rounded-md;
 }
+#swiper-color .swiper-button-next {
+  color: black;
+  position: absolute;
+  right: 8%;
+}
+#swiper-color .swiper-button-prev {
+  color: black;
+  position: absolute;
+  left: 8%;
+}
+@media (max-width: 1024px) {
+  #swiper-color .swiper-button-prev,
+  #swiper-color .swiper-button-next {
+    display: none;
+  }
+}
