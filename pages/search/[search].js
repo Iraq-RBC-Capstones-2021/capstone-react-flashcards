@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import Card from "../../components/card";
+import Card from "../../components/Card";
 import { Range } from "rc-slider";
 import "rc-slider/assets/index.css";
 
