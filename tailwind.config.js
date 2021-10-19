@@ -18,7 +18,7 @@ module.exports = {
         rubik: ["Rubik", "sans-serif"],
       },
       animation: {
-        marquee: "marquee 5s linear infinite",
+        marquee: "marquee 10s linear 0.6s infinite",
       },
       keyframes: {
         marquee: {
