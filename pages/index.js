@@ -1,7 +1,7 @@
 import styles from "../styles/Home.module.css";
 import Carsouel from "../components/CarouselPage";
 import Category from "../components/Category";
-import Card from "../components/card";
+import Card from "../components/Card";
 import data from "../sets.json";
 import { SwiperSlide } from "swiper/react";
 
