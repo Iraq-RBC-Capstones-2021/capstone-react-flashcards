@@ -12,6 +12,7 @@
     "test": "jest --watch"
   },
   "dependencies": {
+    "@headlessui/react": "^1.4.1",
     "@hookform/resolvers": "^2.8.2",
     "@reduxjs/toolkit": "^1.6.1",
     "@tailwindcss/line-clamp": "^0.2.2",
