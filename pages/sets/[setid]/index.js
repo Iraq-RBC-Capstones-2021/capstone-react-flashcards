@@ -2,10 +2,10 @@ import Image from "next/image";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay, EffectCoverflow } from "swiper";
+import { Pagination, Autoplay, Navigation } from "swiper";
 
 import "swiper/css";
-import "swiper/css/effect-coverflow";
+import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/autoplay";
 
@@ -88,17 +88,18 @@ export const SetPreview = ({ setPreview }) => {
         </div>
         <div className="flex justify-center h-96 w-full ">
           <Swiper
-            className="flex justify-center"
+            id="swiper-color"
+            className="flex justify-center relative"
             effect={"coverflow"}
-            grabCursor={true}
             loop={true}
             autoplay={{
-              delay: 2500,
+              delay: 1800,
               disableOnInteraction: false,
             }}
+            navigation
             slidesPerView={1}
             spaceBetween={10}
-            modules={[Autoplay, Pagination, EffectCoverflow]}
+            modules={[Autoplay, Navigation, Pagination]}
           >
             {/*
   data.map(image=>{
