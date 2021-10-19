@@ -5,7 +5,7 @@ import Search from "./Search";
 function Navbar() {
   return (
     <nav>
-      <div className="flex flex-row py-2 border-b border-gray justify-between">
+      <div className="flex flex-row py-2 border-b border-grey justify-between">
         {/* logo */}
         <Link href="/">
           <a className="flex items-center pr-4">
@@ -53,22 +53,22 @@ function Navbar() {
         {/* nav links */}
         <div className="hidden lg:flex lg:flex-row items-center space-x-2">
           <Link href="/">
-            <a className="py-1 px-2 hover:bg-gray rounded-lg transition duration-300">
+            <a className="py-1 px-2 hover:bg-grey rounded-lg transition duration-300">
               Home
             </a>
           </Link>
           <Link href="/categories">
-            <a className="py-1 px-2 hover:bg-gray rounded-lg transition duration-300">
+            <a className="py-1 px-2 hover:bg-grey rounded-lg transition duration-300">
               Categories
             </a>
           </Link>
           <Link href="/library">
-            <a className="py-1 px-2 hover:bg-gray rounded-lg transition duration-300">
+            <a className="py-1 px-2 hover:bg-grey rounded-lg transition duration-300">
               My library
             </a>
           </Link>
           <Link href="/new">
-            <a className="py-1 px-2 text-white bg-primary rounded-lg">
+            <a className="btn-primary">
               <b>+</b> Create
             </a>
           </Link>
@@ -82,14 +82,10 @@ function Navbar() {
         {/* other nav links */}
         <div className="hidden lg:flex items-center space-x-3 ">
           <Link href="/register">
-            <a className="py-1 px-2 font-medium rounded border-2 border-black border-box">
-              Register
-            </a>
+            <a className="btn-secondary">Register</a>
           </Link>
           <Link href="/signin">
-            <a className="py-1 px-2 font-medium text-white bg-primary rounded hover:bg-green-400 transition duration-300">
-              Sign in
-            </a>
+            <a className="btn-primary">Sign in</a>
           </Link>
         </div>
 
@@ -109,34 +105,34 @@ function Navbar() {
       </div>
 
       {/* mobile view */}
-      <div className="w-full block lg:hidden border-b border-gray pb-2">
+      <div className="w-full block lg:hidden border-b border-grey pb-2">
         <Link href="/">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
             Home
           </a>
         </Link>
         <Link href="/categories">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
             Categories
           </a>
         </Link>
         <Link href="/library">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
             My library
           </a>
         </Link>
         <Link href="/new">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
             Create
           </a>
         </Link>
         <Link href="/register">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
             Register
           </a>
         </Link>
         <Link href="/signin">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-gray transition duration-300">
+          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
             Sign in
           </a>
         </Link>
