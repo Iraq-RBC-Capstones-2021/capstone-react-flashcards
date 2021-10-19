@@ -1,9 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
-import Card from "../components/card";
 import Section from "../components/Section";
 import Star from "../public/assets/svg/ic_star.svg";
-import ImgPlaceholder from "../public/assets/image_place_holder.png";
 
 export default function Home() {
   return (

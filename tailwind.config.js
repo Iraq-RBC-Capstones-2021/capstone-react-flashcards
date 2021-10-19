@@ -26,6 +26,10 @@ module.exports = {
           "100%": { transform: "translateX(-100%)" },
         },
       },
+      spacing: {
+        128: "32rem",
+        144: "36rem",
+      },
     },
   },
   variants: {
@@ -35,5 +39,8 @@ module.exports = {
       animation: ["hover", "focus", "group-hover"],
     },
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("@tailwindcss/custom-forms"),
+  ],
 };
