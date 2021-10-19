@@ -4,11 +4,11 @@ import "firebase/compat/firestore";
 
 const app = firebase.initializeApp({
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  authDomain: "educards-23b77.firebaseapp.com",
+  projectId: "educards-23b77",
+  storageBucket: "educards-23b77.appspot.com",
+  messagingSenderId: "1075328991540",
+  appId: "1:1075328991540:web:27785ec47faee06da12561",
 });
 
 const auth = firebase.auth();
