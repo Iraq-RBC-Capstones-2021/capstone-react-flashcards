@@ -26,6 +26,10 @@ module.exports = {
           "100%": { transform: "translateX(-100%)" },
         },
       },
+      spacing: {
+        128: "32rem",
+        144: "36rem",
+      },
     },
   },
   variants: {
