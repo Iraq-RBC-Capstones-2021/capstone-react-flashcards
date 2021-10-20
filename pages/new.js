@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 import CardEditors from "../components/CardEditors";
 import NewSetForm from "../components/NewSetForm";
 import SetSelect from "../components/SetSelect";
+import { createNewSet } from "../store/sets/setsSlice";
 
 const list = [
   {
@@ -24,6 +26,8 @@ const list = [
 ];
 
 export default function CreateCard() {
+  const dispatch = useDispatch();
+
   const [currentSet, setCurrentSet] = useState({});
 
   const [frontContent, setFrontContent] = useState("");
@@ -56,12 +60,7 @@ export default function CreateCard() {
   };
 
   const handleNewSetInfo = (info) => {
-    // add unique id in redux or here
-    //     const data = {
-    //       ...info,
-    //       id:uuid()
-    //     }
-    // dispatch(addNewSet({ data: info }));
+    dispatch(createNewSet(info));
   };
 
   const handleCreateCard = () => {
