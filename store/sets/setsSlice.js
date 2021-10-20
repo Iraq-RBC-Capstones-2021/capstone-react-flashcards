@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { v4 as uuidv4 } from "uuid";
 
 const initialState = {
   data: {
@@ -34,16 +35,19 @@ export const createNewSet = createAsyncThunk(
 
     const tags = newSet.categories.map((category) => category.name);
 
+    const setId = uuidv4();
+
     const data = {
       title: newSet.name,
       description: newSet.description,
       tags,
       imageUrl,
+      setId,
       userName,
       userId,
     };
 
-    firestore.add({ collection: "sets" }, data);
+    firestore.set({ collection: "sets", doc: setId }, data);
 
     return data;
   }
