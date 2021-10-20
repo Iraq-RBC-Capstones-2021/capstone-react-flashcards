@@ -46,6 +46,7 @@ export default function Home() {
             desc="Are you a visual or auditory learner? Add images and sounds for the flashcards to improve your learning."
             isVideo={false}
             image="/assets/image-and-sounds.png"
+            reverse
           />
         </div>
 
