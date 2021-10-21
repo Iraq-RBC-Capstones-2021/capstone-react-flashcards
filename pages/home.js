@@ -37,7 +37,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <main>
+      <main style={{ width: "-webkit-fill-available" }}>
         <p className="font-medium text-2xl mt-12">
           <i className="fas fa-chevron-right fa-sm mr-4"></i>
           Popular
