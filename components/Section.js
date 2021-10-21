@@ -10,6 +10,7 @@ export default function Section({
   video,
   image,
   children,
+  reverse = false,
 }) {
   return (
     // Let's divide the component into 2 panes using flex and wrap it on smaller screens
@@ -18,14 +19,16 @@ export default function Section({
       style={{ minWidth: 600, minHeight: 350 }}
     >
       {/* left segment is for title and children */}
-      <div className="flex flex-col py-3">
-        <Title title={title} titleDesc={titleDesc} titleIcon={titleIcon} />
-        <p className="my-6 text-sm text-gray-400">{desc}</p>
-        {children}
+      <div className="flex flex-col  items-center  ">
+        <div>
+          <Title title={title} titleDesc={titleDesc} titleIcon={titleIcon} />
+          <p className="my-6 text-sm text-gray-400 max-w-sm">{desc}</p>
+          {children}
+        </div>
       </div>
 
       {/* right segment is for image or video */}
-      <div className="w-full h-full">
+      <div className={reverse ? "order-first w-full h-full " : "w-full h-full"}>
         {isVideo ? (
           <WindowPane video={video} />
         ) : (
