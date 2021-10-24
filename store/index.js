@@ -5,12 +5,14 @@ import { getFirebase, reactReduxFirebase } from "react-redux-firebase";
 
 import fb from "../firebase";
 import counterSlice from "./counter/counterSlice";
+import userSlice from "./user/userSlice";
 import setsSlice from "./sets/setsSlice";
 
 const makeStore = () =>
   configureStore({
     reducer: {
       [counterSlice.name]: counterSlice.reducer,
+      [userSlice.name]: userSlice.reducer,
       [setsSlice.name]: setsSlice.reducer,
     },
     devTools: true,
