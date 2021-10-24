@@ -2,7 +2,7 @@ import styles from "../styles/Home.module.css";
 import Carsouel from "../components/CarouselPage";
 import Category from "../components/Category";
 import Card from "../components/Card";
-import data from "../sets.json";
+import data from "../sets.js";
 import { SwiperSlide } from "swiper/react";
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
 
   const allSets = (set) => {
     return (
-      <SwiperSlide>
+      <SwiperSlide key={set.id}>
         <Card
           key={set.id}
           userName={set.userName}
@@ -37,7 +37,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <main>
+      <main style={{ width: "-webkit-fill-available" }}>
         <p className="font-medium text-2xl mt-12">
           <i className="fas fa-chevron-right fa-sm mr-4"></i>
           Popular
