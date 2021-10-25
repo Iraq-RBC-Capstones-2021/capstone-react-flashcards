@@ -203,7 +203,7 @@ export default function CreateCard() {
       />
 
       {errorMessage && (
-        <h5 className="pl-16 text-xl text-primary">{errorMessage}</h5>
+        <h5 className="pl-16 mt-5 text-xl text-primary">{errorMessage}</h5>
       )}
       <CardEditors
         frontContent={frontContent}
