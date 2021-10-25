@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import CardEditors from "../components/CardEditors";
 import NewSetForm from "../components/NewSetForm";
 import SetSelect from "../components/SetSelect";
+import Attachments from "../components/Attachments";
 import { createNewSet } from "../store/sets/setsSlice";
 
 const list = [
@@ -30,8 +31,19 @@ export default function CreateCard() {
 
   const [currentSet, setCurrentSet] = useState({});
 
-  const [frontContent, setFrontContent] = useState("");
-  const [backContent, setBackContent] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [frontContent, setFrontContent] = useState({
+    text: "",
+    images: [],
+    audio: [],
+  });
+
+  const [backContent, setBackContent] = useState({
+    text: "",
+    images: [],
+    audio: [],
+  });
 
   const [isNewSet, setIsNewSet] = useState(false);
 
@@ -43,15 +55,84 @@ export default function CreateCard() {
     setBackContent(front);
   };
 
-  const handleCardContentChange = (editor, pos) => {
+  const handleCardTextChange = (editor, pos) => {
     switch (pos) {
       case "front":
-        setFrontContent(editor.getHTML());
+        setFrontContent((prev) => ({ ...prev, text: editor.getHTML() }));
         break;
       case "back":
-        setBackContent(editor.getHTML());
-
+        setBackContent((prev) => ({ ...prev, text: editor.getHTML() }));
         break;
+    }
+  };
+
+  const handleCardFileChange = (e, pos) => {
+    if (!e) return;
+
+    const isImage = e.target.files[0].type.includes("image");
+    const file = e.target.files[0];
+
+    switch (pos) {
+      case "front":
+        if (isImage) {
+          setFrontContent({
+            ...frontContent,
+            images: [...frontContent.images, file],
+          });
+        } else {
+          setFrontContent({
+            ...frontContent,
+            audio: [...frontContent.audio, file],
+          });
+        }
+        break;
+      case "back":
+        if (isImage) {
+          setBackContent({
+            ...backContent,
+            images: [...backContent.images, file],
+          });
+        } else {
+          setBackContent({
+            ...backContent,
+            audio: [...backContent.audio, file],
+          });
+        }
+    }
+  };
+
+  const handleFileRemove = (file, pos) => {
+    const isImage = file.type.includes("image");
+
+    switch (pos) {
+      case "front":
+        if (isImage) {
+          setFrontContent({
+            ...frontContent,
+            images: frontContent.images.filter((image) => image !== file),
+          });
+        } else {
+          setFrontContent({
+            ...frontContent,
+            audio: frontContent.audio.filter((audio) => audio !== file),
+          });
+        }
+        break;
+      case "back":
+        if (isImage) {
+          setBackContent({
+            ...backContent,
+            images: backContent.images.filter((image) => image !== file),
+          });
+        } else {
+          setBackContent({
+            ...backContent,
+            audio: backContent.audio.filter((audio) => audio !== file),
+          });
+        }
+        break;
+
+      default:
     }
   };
 
@@ -64,12 +145,29 @@ export default function CreateCard() {
   };
 
   const handleCreateCard = () => {
+    if (!currentSet.id) {
+      setErrorMessage("Please choose a set");
+      return;
+    }
+
+    if (
+      !frontContent.text &&
+      frontContent.images.length <= 0 &&
+      frontContent.audio.length <= 0 &&
+      !backContent.text &&
+      backContent.images.length <= 0 &&
+      backContent.audio.length <= 0
+    ) {
+      setErrorMessage("Please add content");
+      return;
+    }
+
+    setErrorMessage("");
+
     const data = {
-      setId: currentSet.id,
       front: frontContent,
       back: backContent,
-      images: null,
-      audio: null,
+      setId: currentSet.id,
     };
 
     // dispatch(addNewCard({ cardInfo: data }));
@@ -97,11 +195,22 @@ export default function CreateCard() {
           )}
         </div>
       </div>
+
+      <Attachments
+        front={frontContent}
+        back={backContent}
+        onFileRemove={handleFileRemove}
+      />
+
+      {errorMessage && (
+        <h5 className="pl-16 text-xl text-primary">{errorMessage}</h5>
+      )}
       <CardEditors
         frontContent={frontContent}
         backContent={backContent}
-        onContentChange={handleCardContentChange}
+        onContentChange={handleCardTextChange}
         onContentSwitch={handleCardSwitch}
+        onFileChange={handleCardFileChange}
         onSubmit={handleCreateCard}
         submitTitle="Create Flash Card"
       />

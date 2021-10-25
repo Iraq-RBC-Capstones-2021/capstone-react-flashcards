@@ -1,4 +1,5 @@
 import { EditorContent } from "@tiptap/react";
+import Image from "next/image";
 
 import EditorOption from "./EditorOption";
 import codeSvg from "../public/assets/text--code.svg";
@@ -12,7 +13,7 @@ import headingSvg from "../public/assets/text--heading.svg";
 import undoSvg from "../public/assets/text--undo.svg";
 import redoSvg from "../public/assets/text--redo.svg";
 
-export default function Editor({ editor }) {
+export default function Editor({ editor, onFileChange }) {
   if (!editor) return null;
 
   return (
@@ -68,8 +69,34 @@ export default function Editor({ editor }) {
             }
           />
         </div>
-        <EditorOption icon={imageSvg} />
-        <EditorOption icon={audioSvg} />
+
+        <label
+          className="hover:bg-primary hover:bg-opacity-20 py-1 px-2 font-serif flex 
+          items-center h-full overflow-hidden cursor-pointer"
+        >
+          <input
+            type="file"
+            name="images"
+            onChange={onFileChange}
+            accept="image/png, image/jpeg"
+            className="absolute z-0 opacity-0 w-5"
+          />
+          <Image src={imageSvg} alt="Icon" width="20" height="20" />
+        </label>
+
+        <label
+          className="hover:bg-primary hover:bg-opacity-20 py-1 px-2 font-serif flex 
+          items-center h-full overflow-hidden cursor-pointer"
+        >
+          <input
+            type="file"
+            name="audio"
+            onChange={onFileChange}
+            accept="audio/*"
+            className="absolute z-0 opacity-0 w-5"
+          />
+          <Image src={audioSvg} alt="Icon" width="20" height="20" />
+        </label>
       </div>
       <EditorContent editor={editor} />
     </div>
