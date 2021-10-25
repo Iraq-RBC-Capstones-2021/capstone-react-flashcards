@@ -86,6 +86,7 @@ export const signInWithGoogle = createAsyncThunk(
       const currentUser = auth.currentUser;
 
       const data = {
+        displayName: currentUser.displayName,
         email: currentUser.email,
         photoURL: currentUser.photoURL,
         uid: currentUser.uid,
@@ -108,12 +109,6 @@ export const signOut = createAsyncThunk("user/signOut", async (thunkapi) => {
 
     await auth.signOut();
 
-    const currentUser = auth.currentUser;
-
-    await currentUser.updateProfile({
-      displayName: "",
-    });
-
     const data = {
       displayName: "",
       email: "",
@@ -128,38 +123,6 @@ export const signOut = createAsyncThunk("user/signOut", async (thunkapi) => {
     return rejectWithValue(e.message);
   }
 });
-
-export const resetPassword = createAsyncThunk(
-  "user/resetPassword",
-  async (email, thunkapi) => {
-    try {
-      const { getFirebase } = thunkapi.extra;
-      const firebase = getFirebase();
-      const auth = firebase.auth();
-
-      await auth.sendPasswordResetEmail(email);
-
-      const currentUser = auth.currentUser;
-
-      await currentUser.updateProfile({
-        displayName: info.name,
-      });
-
-      const data = {
-        displayName: info.name,
-        email: info.email,
-        photoURL: currentUser.photoURL,
-        uid: currentUser.uid,
-      };
-
-      return data;
-    } catch (e) {
-      const { rejectWithValue } = thunkapi;
-
-      return rejectWithValue(e.message);
-    }
-  }
-);
 
 const userSlice = createSlice({
   initialState,
@@ -201,19 +164,6 @@ const userSlice = createSlice({
       state.data = action.payload;
     },
     [signOut.rejected]: (state, action) => {
-      state.status = "error";
-      state.errorMessage = action.payload;
-    },
-
-    [resetPassword.pending]: (state) => {
-      state.status = "loading";
-    },
-    [resetPassword.fulfilled]: (state, action) => {
-      state.status = "idle";
-      state.errorMessage = "";
-      state.data = action.payload;
-    },
-    [resetPassword.rejected]: (state, action) => {
       state.status = "error";
       state.errorMessage = action.payload;
     },
