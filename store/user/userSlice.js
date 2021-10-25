@@ -38,6 +38,129 @@ export const registerWithEmailAndPassword = createAsyncThunk(
   }
 );
 
+export const signInWithEmailAndPassword = createAsyncThunk(
+  "user/signInWithEmailAndPassword",
+  async (info, thunkapi) => {
+    try {
+      const { getFirebase } = thunkapi.extra;
+      const firebase = getFirebase();
+      const auth = firebase.auth();
+
+      await auth.signInWithEmailAndPassword(info.email, info.password);
+
+      const currentUser = auth.currentUser;
+
+      await currentUser.updateProfile({
+        displayName: info.name,
+      });
+
+      const data = {
+        displayName: info.name,
+        email: info.email,
+        photoURL: currentUser.photoURL,
+        uid: currentUser.uid,
+      };
+
+      return data;
+    } catch (e) {
+      const { rejectWithValue } = thunkapi;
+
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const signInWithGoogle = createAsyncThunk(
+  "user/signInWithGoogle",
+  async (_, thunkapi) => {
+    try {
+      const { getFirebase } = thunkapi.extra;
+      const firebase = getFirebase();
+      const auth = firebase.auth();
+
+      const provider = new firebase.auth.GoogleAuthProvider();
+      await provider.setCustomParameters({ prompt: "select_account" });
+
+      await auth.signInWithPopup(provider);
+
+      const currentUser = auth.currentUser;
+
+      const data = {
+        email: currentUser.email,
+        photoURL: currentUser.photoURL,
+        uid: currentUser.uid,
+      };
+
+      return data;
+    } catch (e) {
+      const { rejectWithValue } = thunkapi;
+
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
+export const signOut = createAsyncThunk("user/signOut", async (thunkapi) => {
+  try {
+    const { getFirebase } = thunkapi.extra;
+    const firebase = getFirebase();
+    const auth = firebase.auth();
+
+    await auth.signOut();
+
+    const currentUser = auth.currentUser;
+
+    await currentUser.updateProfile({
+      displayName: "",
+    });
+
+    const data = {
+      displayName: "",
+      email: "",
+      photoURL: "",
+      uid: "",
+    };
+
+    return data;
+  } catch (e) {
+    const { rejectWithValue } = thunkapi;
+
+    return rejectWithValue(e.message);
+  }
+});
+
+export const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async (email, thunkapi) => {
+    try {
+      const { getFirebase } = thunkapi.extra;
+      const firebase = getFirebase();
+      const auth = firebase.auth();
+
+      await auth.sendPasswordResetEmail(email);
+
+      const currentUser = auth.currentUser;
+
+      await currentUser.updateProfile({
+        displayName: info.name,
+      });
+
+      const data = {
+        displayName: info.name,
+        email: info.email,
+        photoURL: currentUser.photoURL,
+        uid: currentUser.uid,
+      };
+
+      return data;
+    } catch (e) {
+      const { rejectWithValue } = thunkapi;
+
+      return rejectWithValue(e.message);
+    }
+  }
+);
+
 const userSlice = createSlice({
   initialState,
   name: "user",
@@ -52,6 +175,58 @@ const userSlice = createSlice({
       state.data = action.payload;
     },
     [registerWithEmailAndPassword.rejected]: (state, action) => {
+      state.status = "error";
+      state.errorMessage = action.payload;
+    },
+
+    [signInWithEmailAndPassword.pending]: (state) => {
+      state.status = "loading";
+    },
+    [signInWithEmailAndPassword.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.errorMessage = "";
+      state.data = action.payload;
+    },
+    [signInWithEmailAndPassword.rejected]: (state, action) => {
+      state.status = "error";
+      state.errorMessage = action.payload;
+    },
+
+    [signOut.pending]: (state) => {
+      state.status = "loading";
+    },
+    [signOut.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.errorMessage = "";
+      state.data = action.payload;
+    },
+    [signOut.rejected]: (state, action) => {
+      state.status = "error";
+      state.errorMessage = action.payload;
+    },
+
+    [resetPassword.pending]: (state) => {
+      state.status = "loading";
+    },
+    [resetPassword.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.errorMessage = "";
+      state.data = action.payload;
+    },
+    [resetPassword.rejected]: (state, action) => {
+      state.status = "error";
+      state.errorMessage = action.payload;
+    },
+
+    [signInWithGoogle.pending]: (state) => {
+      state.status = "loading";
+    },
+    [signInWithGoogle.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.errorMessage = "";
+      state.data = action.payload;
+    },
+    [signInWithGoogle.rejected]: (state, action) => {
       state.status = "error";
       state.errorMessage = action.payload;
     },
