@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { useState } from "react";
 
 import Editor from "./Editor";
+import FlashCardPreviewModal from "./FlashCardPreviewModal";
 import useCardEditor from "../hooks/useCardEditor";
 import reverseSvg from "../public/assets/arrow-left-right.svg";
 
@@ -13,6 +15,8 @@ export default function CardEditors({
   onSubmit,
   submitTitle = "Create",
 }) {
+  const [isModalToggled, setIsModalToggled] = useState(false);
+
   const frontEditor = useCardEditor(frontContent.text, {
     onUpdate: ({ editor }) => onContentChange(editor, "front"),
   });
@@ -27,7 +31,9 @@ export default function CardEditors({
     backEditor.commands.setContent(frontContent.text);
   };
 
-  const handleOnPreview = () => {};
+  const handleOnPreview = () => {
+    setIsModalToggled((prev) => !prev);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -64,6 +70,20 @@ export default function CardEditors({
           {submitTitle}
         </button>
       </div>
+      <FlashCardPreviewModal
+        front={{
+          text: frontContent.text,
+          images: frontContent.images,
+          audio: frontContent.audio,
+        }}
+        back={{
+          text: backContent.text,
+          images: backContent.images,
+          audio: backContent.audio,
+        }}
+        isOpen={isModalToggled}
+        onExit={handleOnPreview}
+      />
     </div>
   );
 }

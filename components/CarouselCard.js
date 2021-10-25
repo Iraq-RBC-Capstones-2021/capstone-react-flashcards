@@ -1,39 +1,67 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
+import { useEditor, EditorContent } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+
 import Player from "./AudioPlayer";
 
-function CarouselCard({
-  flashcard = { title: "", content: "", images: [], audios: [] },
-}) {
-  let hasAudio = flashcard.audios && flashcard.audios.length > 0;
+function CarouselCard({ flashcard = { text: "", images: [], audio: [] } }) {
+  let hasAudio = flashcard.audio && flashcard.audio.length > 0;
   const SSR = typeof window === "undefined";
 
-  return (
-    <div className="container h-96 p-4 shadow-md rounded-xl text-center relative">
-      {/* title */}
-      <h1 className="text-2xl">{flashcard.title}</h1>
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        code: {
+          HTMLAttributes: {
+            class: "bg-black text-primary rounded-sm px-2",
+          },
+        },
+        heading: {
+          HTMLAttributes: {
+            class: "text-2xl",
+          },
+        },
+      }),
+      Underline,
+      TextStyle,
+      Color,
+    ],
+    content: flashcard.text,
+    editable: false,
+  });
 
-      {/* content */}
-      <p>{flashcard.content}</p>
+  return (
+    <div className="container h-96 p-4 flex flex-col gap-5 shadow-md rounded-xl text-center  overflow-y-auto">
+      {/* text */}
+      <EditorContent editor={editor} />
 
       {/* image */}
-      <div className="flex justify-center h-40">
-        {flashcard.images.map((image) => (
-          <img key={image} src={image} alt="" />
+      <div className="flex items-center justify-center flex-wrap gap-1 ">
+        {flashcard.images.map((image, index) => (
+          <img
+            key={index}
+            src={image}
+            alt=""
+            className="w-48 h-48 object-contain border border-gray rounded-xl p-2"
+          />
         ))}
       </div>
 
       {/* audio */}
-      <div className="container mx-auto">
+      <div className="flex justify-center items-center">
         {hasAudio && (
-          <div className="inline-flex items-center justify-center place-items-center justify-between absolute bottom-4 border-2 border-black rounded-lg content-center">
-            {flashcard.audios.map((audio) => (
+          <div className="flex items-center justify-center gap-1 border border-black rounded-lg overflow-hidden ">
+            {flashcard.audio.map((file) => (
               <button
-                key={audio}
-                className="group rounded-lg hover:bg-primary active:bg-primary p-1 transition-all duration-150"
+                key={file}
+                className="group hover:bg-primary active:bg-primary p-1 transition-all duration-150"
                 type="button"
                 onClick={(e) => e.stopPropagation()}
               >
-                {!SSR ? <Player url={audio} /> : null}
+                {!SSR ? <Player url={file} /> : null}
               </button>
             ))}
           </div>
