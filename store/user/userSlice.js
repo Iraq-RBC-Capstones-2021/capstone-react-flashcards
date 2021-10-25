@@ -109,14 +109,7 @@ export const signOut = createAsyncThunk("user/signOut", async (thunkapi) => {
 
     await auth.signOut();
 
-    const data = {
-      displayName: "",
-      email: "",
-      photoURL: "",
-      uid: "",
-    };
-
-    return data;
+    return null;
   } catch (e) {
     const { rejectWithValue } = thunkapi;
 
