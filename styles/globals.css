@@ -7,38 +7,43 @@ body {
   @apply font-rubik;
 }
 
-.scene {
+.cardContainer {
+  position: relative;
+  cursor: pointer;
   perspective: 1000px;
 }
 
-.card {
-  width: 100%;
-  height: 100%;
-  transition: transform 0.7s;
-  transform-style: preserve-3d;
-  cursor: pointer;
-  position: relative;
+.front,
+.back {
+  display: block;
+  transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition-duration: 0.5s;
+  transition-property: transform;
 }
 
-.is-flip {
-  transform: rotateX(180deg);
-}
-
-.card-face {
+.front {
   position: absolute;
+  opacity: 0;
+  top: 0px;
+  left: 0px;
   width: 100%;
   height: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  transform: rotateX(-180deg);
 }
 
-.card-face-front {
-  background: white;
+.back {
+  transform: rotateY(0deg);
 }
 
-.card-face-back {
-  background: white;
+.front-flip {
+  transform: rotateX(0);
+  opacity: 1;
+}
+
+.back-flip {
   transform: rotateX(180deg);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .btn-primary {

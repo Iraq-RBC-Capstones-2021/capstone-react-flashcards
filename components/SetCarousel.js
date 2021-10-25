@@ -1,4 +1,5 @@
 import CarouselCard from "./CarouselCard";
+import FlashCard from "./FlashCard";
 import { useState } from "react";
 
 function SetCarousel({
@@ -20,7 +21,6 @@ function SetCarousel({
   ],
 }) {
   const [flag, setFlag] = useState(0);
-  const [flip, setFlip] = useState(true);
 
   const flashcard = set[flag];
 
@@ -36,10 +36,6 @@ function SetCarousel({
       setFlag(flag + 1);
       setFlip(true);
     }
-  };
-
-  const toggleFlip = () => {
-    setFlip(!flip);
   };
 
   return (
@@ -66,19 +62,7 @@ function SetCarousel({
           </button>
 
           {/* card */}
-          <div className="scene w-full h-96 p-10 m-10">
-            <div
-              className={flip ? "card" : "card is-flip"}
-              onClick={toggleFlip}
-            >
-              <div className="card-face card-face-front">
-                <CarouselCard flashcard={flashcard.front} />
-              </div>
-              <div className="card-face card-face-back">
-                <CarouselCard flashcard={flashcard.back} />
-              </div>
-            </div>
-          </div>
+          <FlashCard front={flashcard.front} back={flashcard.back} />
 
           {/* next-card button */}
           <button className="p-4 w-20 h-20 self-center" onClick={handleNext}>
