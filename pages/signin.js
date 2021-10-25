@@ -6,16 +6,25 @@ import user from "../public/assets/svg/User.svg";
 import { useForm } from "react-hook-form";
 // Logo
 import googleLogo from "../public/assets/Google.svg";
+import { useDispatch } from "react-redux";
+import {
+  signInWithEmailAndPassword,
+  signInWithGoogle,
+} from "../store/user/userSlice";
 
 const Signin = () => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
-    console.log(data);
+    dispatch(signInWithEmailAndPassword(data));
   };
+
   return (
     <div className="h-70v flex flex-col  items-center justify-center ">
       <Head>
@@ -94,7 +103,10 @@ const Signin = () => {
           </Link>
 
           {/** log in with google */}
-          <button className="relative btn-secondary lg:w-64 text-center w-full">
+          <button
+            className="relative btn-secondary lg:w-64 text-center w-full"
+            onClick={() => dispatch(signInWithGoogle())}
+          >
             <div className="transform translate-x-5 ">
               <span className="w-7 inline-block absolute left-3/6 transform -translate-y-0.5 -translate-x-9">
                 <Image src={googleLogo} alt="Google" height={38} width={38} />
