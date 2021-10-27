@@ -3,13 +3,17 @@ import Image from "next/image";
 
 import arrowDownSvg from "../public/assets/arrow-down.svg";
 
-export default function SetSelect({ setsList, onSelect }) {
-  const [searchValue, setSearchValue] = useState("");
+export default function SetSelect({
+  setsList,
+  onSelect,
+  searchValue,
+  onSearchValueChange,
+}) {
   const [isSelectActive, setIsSelectActive] = useState(false);
   const [data, setData] = useState(setsList);
 
   const handleSearch = (e) => {
-    setSearchValue(e.target.value);
+    onSearchValueChange(e.target.value);
     setData(
       setsList.filter((set) =>
         set.title.toLowerCase().includes(e.target.value.toLowerCase())
@@ -21,7 +25,7 @@ export default function SetSelect({ setsList, onSelect }) {
 
   const handleSelect = (set) => {
     onSelect(set);
-    setSearchValue(set.title);
+    onSearchValueChange(set.title);
     setIsSelectActive(false);
   };
 

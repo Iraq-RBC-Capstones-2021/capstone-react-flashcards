@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import CardEditors from "../components/CardEditors";
@@ -12,7 +12,9 @@ export default function CreateCard() {
 
   const sets = useSelector((state) => state.sets.data.mine);
 
-  const [currentSet, setCurrentSet] = useState({});
+  const [currentSet, setCurrentSet] = useState(null);
+
+  const [searchValueSet, setSearchValueSet] = useState("");
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -123,12 +125,20 @@ export default function CreateCard() {
     setCurrentSet(selectedSet);
   };
 
+  const handleSearchValueSet = (value) => {
+    setSearchValueSet(value);
+  };
+
   const handleNewSetInfo = (info) => {
     dispatch(createNewSet(info));
+
+    setCurrentSet("");
+
+    setErrorMessage(`${info.title} set has been created`);
   };
 
   const handleCreateCard = () => {
-    if (!currentSet.setId) {
+    if (!currentSet) {
       setErrorMessage("Please choose a set");
       return;
     }
@@ -169,6 +179,23 @@ export default function CreateCard() {
     setErrorMessage(`Flash Card Added To ${currentSet.title}`);
   };
 
+  useEffect(() => {
+    if (
+      Object.prototype.toString.call(currentSet) === "[object String]" &&
+      !isNewSet
+    ) {
+      const { title } = sets[sets.length - 1];
+      setCurrentSet(sets[sets.length - 1]);
+      setSearchValueSet(title);
+    }
+  }, [sets, currentSet, isNewSet]);
+
+  useEffect(() => {
+    if (searchValueSet === "") {
+      setCurrentSet(null);
+    }
+  }, [searchValueSet]);
+
   return (
     <div className="px-32 flex flex-col justify-between">
       <div className=" mt-10 mb-32 h-60">
@@ -187,7 +214,12 @@ export default function CreateCard() {
           {isNewSet ? (
             <NewSetForm onSetInfoSubmit={handleNewSetInfo} />
           ) : (
-            <SetSelect onSelect={handleSetSelect} setsList={sets} />
+            <SetSelect
+              onSelect={handleSetSelect}
+              setsList={sets}
+              searchValue={searchValueSet}
+              onSearchValueChange={handleSearchValueSet}
+            />
           )}
         </div>
       </div>
