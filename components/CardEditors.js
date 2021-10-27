@@ -1,6 +1,8 @@
 import Image from "next/image";
+import { useState } from "react";
 
 import Editor from "./Editor";
+import FlashCardPreviewModal from "./FlashCardPreviewModal";
 import useCardEditor from "../hooks/useCardEditor";
 import reverseSvg from "../public/assets/arrow-left-right.svg";
 
@@ -9,24 +11,29 @@ export default function CardEditors({
   backContent,
   onContentChange,
   onContentSwitch,
+  onFileChange,
   onSubmit,
   submitTitle = "Create",
 }) {
-  const frontEditor = useCardEditor(frontContent, {
+  const [isModalToggled, setIsModalToggled] = useState(false);
+
+  const frontEditor = useCardEditor(frontContent.text, {
     onUpdate: ({ editor }) => onContentChange(editor, "front"),
   });
 
-  const backEditor = useCardEditor(backContent, {
+  const backEditor = useCardEditor(backContent.text, {
     onUpdate: ({ editor }) => onContentChange(editor, "back"),
   });
 
   const handleSwitch = () => {
     onContentSwitch();
-    frontEditor.commands.setContent(backContent);
-    backEditor.commands.setContent(frontContent);
+    frontEditor.commands.setContent(backContent.text);
+    backEditor.commands.setContent(frontContent.text);
   };
 
-  const handleOnPreview = () => {};
+  const handleOnPreview = () => {
+    setIsModalToggled((prev) => !prev);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -38,7 +45,10 @@ export default function CardEditors({
       <div className="flex flex-col xl:flex-row items-center gap-5 ">
         <div>
           <h3 className="ml-2 text-xl font-bold">Front</h3>
-          <Editor editor={frontEditor} />
+          <Editor
+            editor={frontEditor}
+            onFileChange={(e) => onFileChange(e, "front")}
+          />
         </div>
         <div
           className="mt-10 mb-5 md:m-0 cursor-pointer"
@@ -49,7 +59,10 @@ export default function CardEditors({
         </div>
         <div>
           <h3 className="ml-2 text-xl font-bold">Back</h3>
-          <Editor editor={backEditor} />
+          <Editor
+            editor={backEditor}
+            onFileChange={(e) => onFileChange(e, "back")}
+          />
         </div>
       </div>
       <div className="flex items-center justify-center my-10">
@@ -57,6 +70,20 @@ export default function CardEditors({
           {submitTitle}
         </button>
       </div>
+      <FlashCardPreviewModal
+        front={{
+          text: frontContent.text,
+          images: frontContent.images,
+          audio: frontContent.audio,
+        }}
+        back={{
+          text: backContent.text,
+          images: backContent.images,
+          audio: backContent.audio,
+        }}
+        isOpen={isModalToggled}
+        onExit={handleOnPreview}
+      />
     </div>
   );
 }
