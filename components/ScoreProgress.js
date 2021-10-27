@@ -1,7 +1,7 @@
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-export const ScoreProgress = ({
+const ScoreProgress = ({
   number = "20",
   color = "#FF886C",
   title = "Loading",
@@ -28,3 +28,5 @@ export const ScoreProgress = ({
     </div>
   );
 };
+
+export default ScoreProgress;

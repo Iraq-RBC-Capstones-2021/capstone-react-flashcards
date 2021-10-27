@@ -1,5 +1,5 @@
 import CarouselCard from "./CarouselCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function SetCarousel({
   set = [
@@ -18,6 +18,7 @@ function SetCarousel({
       },
     },
   ],
+  getCurrentCard,
 }) {
   const [flag, setFlag] = useState(0);
   const [flip, setFlip] = useState(true);
@@ -41,6 +42,11 @@ function SetCarousel({
   const toggleFlip = () => {
     setFlip(!flip);
   };
+
+  // we need to know the current card index in the card review/study page
+  useEffect(() => {
+    getCurrentCard(flag);
+  }, [flag]);
 
   return (
     <>
