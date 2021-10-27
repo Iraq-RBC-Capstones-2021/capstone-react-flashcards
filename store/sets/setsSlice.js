@@ -35,7 +35,7 @@ export const createNewSet = createAsyncThunk(
     const timeStamp = firestore.FieldValue.serverTimestamp;
 
     const data = {
-      title: newSet.name,
+      title: newSet.title,
       description: newSet.description,
       tags: newSet.categories,
       imageUrl,

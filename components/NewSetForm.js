@@ -8,7 +8,7 @@ import CategoriesSelect from "./CategoriesSelect";
 const categories = ["English", "Math", "Biology"];
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  title: yup.string().required(),
   description: yup.string(),
   cover: yup
     .mixed()
@@ -64,7 +64,7 @@ export default function NewSetForm({ onSetInfoSubmit }) {
         <input
           type="text"
           name="title"
-          {...register("name")}
+          {...register("title")}
           className="w-full border-black border-2 rounded text-lg px-2 py-1 z-10 outline-none"
           placeholder="Set's Name"
         />
