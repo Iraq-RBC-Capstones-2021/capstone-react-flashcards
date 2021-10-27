@@ -33,7 +33,6 @@
     "react-redux-firebase": "2.5.1",
     "redux-firestore": "^0.15.0",
     "swiper": "^7.0.9",
-    "uuid": "^8.3.2",
     "yup": "^0.32.11"
   },
   "devDependencies": {

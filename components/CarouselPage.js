@@ -28,7 +28,6 @@ export default function Carsouel({ children }) {
         },
       }}
       navigation={true}
-      style={{ width: "1700px" }}
     >
       {children}
     </Swiper>

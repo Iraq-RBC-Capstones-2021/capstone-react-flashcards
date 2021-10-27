@@ -2,18 +2,22 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 import lock from "../public/assets/svg/Lock.svg";
 import user from "../public/assets/svg/User.svg";
+import { registerWithEmailAndPassword } from "../store/user/userSlice";
 
 const Signup = () => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
+    dispatch(registerWithEmailAndPassword(data));
   };
   return (
     <div className="h-70v flex flex-col  items-center justify-center">
