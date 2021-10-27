@@ -11,6 +11,7 @@ const initialState = {
     popular: [],
     suggested: [],
     recent: [],
+    cards: [],
   },
   status: "idle",
 };
