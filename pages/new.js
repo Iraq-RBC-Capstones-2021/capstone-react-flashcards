@@ -12,11 +12,13 @@ export default function CreateCard() {
 
   const sets = useSelector((state) => state.sets.data.mine);
 
+  const pageStatus = useSelector((state) => state.sets.status);
+
   const [currentSet, setCurrentSet] = useState(null);
 
   const [searchValueSet, setSearchValueSet] = useState("");
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const [frontContent, setFrontContent] = useState({
     text: "",
@@ -134,12 +136,12 @@ export default function CreateCard() {
 
     setCurrentSet("");
 
-    setErrorMessage(`${info.title} set has been created`);
+    setFeedbackMessage(`${info.title} set has been created`);
   };
 
   const handleCreateCard = () => {
     if (!currentSet) {
-      setErrorMessage("Please choose a set");
+      setFeedbackMessage("Please choose a set");
       return;
     }
 
@@ -151,11 +153,11 @@ export default function CreateCard() {
       backContent.images.length <= 0 &&
       backContent.audio.length <= 0
     ) {
-      setErrorMessage("Please add content");
+      setFeedbackMessage("Please add content");
       return;
     }
 
-    setErrorMessage("");
+    setFeedbackMessage("");
 
     const data = {
       front: frontContent,
@@ -176,7 +178,7 @@ export default function CreateCard() {
       audio: [],
     });
 
-    setErrorMessage(`Flash Card Added To ${currentSet.title}`);
+    setFeedbackMessage(`Flash Card Added To ${currentSet.title}`);
   };
 
   useEffect(() => {
@@ -195,6 +197,10 @@ export default function CreateCard() {
       setCurrentSet(null);
     }
   }, [searchValueSet]);
+
+  if (pageStatus === "loading") return <h1>Loading....</h1>;
+
+  if (pageStatus === "error") setFeedbackMessage("Something Went Wrong");
 
   return (
     <div className="px-32 flex flex-col justify-between">
@@ -224,15 +230,16 @@ export default function CreateCard() {
         </div>
       </div>
 
+      {feedbackMessage && (
+        <h5 className="text-xl mb-5 text-primary">{feedbackMessage}</h5>
+      )}
+
       <Attachments
         front={frontContent}
         back={backContent}
         onFileRemove={handleFileRemove}
       />
 
-      {errorMessage && (
-        <h5 className="pl-16 mt-5 text-xl text-primary">{errorMessage}</h5>
-      )}
       <CardEditors
         frontContent={frontContent}
         backContent={backContent}
