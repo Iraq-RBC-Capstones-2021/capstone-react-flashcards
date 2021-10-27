@@ -34,8 +34,7 @@ export const createNewSet = createAsyncThunk(
       imageUrl = await imageRef.getDownloadURL();
     }
 
-    const userId = firebase.auth().currentUser.uid;
-    const userName = firebase.auth().currentUser.displayName;
+    const currentUser = firebase.auth().currentUser;
 
     const timeStamp = firestore.FieldValue.serverTimestamp;
 
@@ -44,9 +43,11 @@ export const createNewSet = createAsyncThunk(
       description: newSet.description,
       tags: newSet.categories,
       imageUrl,
-      userName,
-      userId,
+      userName: currentUser.displayName,
+      userId: currentUser.uid,
+      avatar: currentUser.photoURL,
       createdAt: timeStamp(),
+      cardCount: 0,
     };
 
     const doc = await firestore.add({ collection: "sets" }, data);
