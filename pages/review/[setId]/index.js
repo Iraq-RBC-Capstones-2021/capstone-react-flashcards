@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import ScoreProgress from "../../../components/ScoreProgress";
 import { useRouter } from "next/dist/client/router";
-import { db } from "../../../firebase";
+import { db, auth } from "../../../firebase";
+import { getAuth } from "firebase/auth";
 import {
   collection,
   setDoc,
@@ -21,24 +22,35 @@ export default function Review() {
   const [cardCount, setCardCount] = useState(0);
   const [firstTime, setFirstTime] = useState(true);
   const [setName, setSetName] = useState("Set Name");
+  const [historyOfSet, setHistoryOfSet] = useState({});
+  const [userUID, setUserUID] = useState("test-user");
+
   const router = useRouter();
   const { setId } = router.query;
 
   // Get userUID
-  const userUID = "user2";
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  useEffect(() => {
+    if (user != null) {
+      setUserUID(user.uid);
+    }
+  }, [user]);
 
   // check if user have history, if not create one.
   async function checkUserHistory() {
     const docSnap = await getDoc(doc(db, "history", userUID));
     if (!docSnap.exists()) {
-      setDoc(doc(db, "history", userUID), { sets: null });
+      setDoc(doc(db, "history", userUID), {});
     } else {
       // check to see if user played this set before
-      if (docSnap.data().sets != null) {
-        console.log("user Have history", docSnap.data().sets);
-        // if user have played this set get it's history.
+      const setShouldBeAt = db.doc(`/history/${userUID}/sets/${setId}`);
+      if ((await getDoc(setShouldBeAt)).exists()) {
+        setFirstTime(false);
+        const sh = await getDoc(setShouldBeAt);
+        setHistoryOfSet(sh.data());
       } else {
-        console.log("user have not played any sets");
       }
     }
   }
@@ -47,21 +59,28 @@ export default function Review() {
   async function getSetCardsCount() {
     const q = query(collection(db, "cards"), where("setId", "==", setId));
     const querySnapshot = await getDocs(q);
-    console.log("query snapshot ===>>>", querySnapshot.docs.length);
     setCardCount(querySnapshot.docs.length);
   }
   async function getSetName() {
     const setSnap = await getDoc(doc(db, "sets", setId));
-    console.log("setSnap ===>>> ", setSnap.data().title);
     setSetName(setSnap.data().title);
   }
 
-  // set the correct statistics
-  function statistics() {
+  // set statistics
+  async function statistics() {
     if (firstTime) {
       setNewCards(cardCount);
     } else {
-      //
+      const hh = Object.values(historyOfSet);
+
+      const toReview = hh.filter((el) => !el.guess);
+      setToReview(toReview.length);
+
+      const learning = hh.filter((el) => el.guess);
+      setLearning(learning.length);
+
+      const nn = cardCount - learning.length - toReview.length;
+      setNewCards(nn);
     }
   }
 
@@ -71,11 +90,11 @@ export default function Review() {
       getSetCardsCount();
       getSetName();
     }
-  }, [router.query]);
+  }, [router.query, userUID]);
 
   useEffect(() => {
     statistics();
-  }, [cardCount]);
+  }, [cardCount, historyOfSet, userUID]);
 
   return (
     <div className="flex justify-center my-10">
