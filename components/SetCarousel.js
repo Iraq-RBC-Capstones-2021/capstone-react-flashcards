@@ -1,5 +1,6 @@
 import CarouselCard from "./CarouselCard";
-import { useEffect, useState } from "react";
+import FlashCard from "./FlashCard";
+import { useState } from "react";
 
 function SetCarousel({
   set = [
@@ -21,7 +22,6 @@ function SetCarousel({
   getCurrentCard,
 }) {
   const [flag, setFlag] = useState(0);
-  const [flip, setFlip] = useState(true);
 
   const flashcard = set[flag];
 
@@ -38,15 +38,6 @@ function SetCarousel({
       setFlip(true);
     }
   };
-
-  const toggleFlip = () => {
-    setFlip(!flip);
-  };
-
-  // we need to know the current card index in the card review/study page
-  useEffect(() => {
-    getCurrentCard(flag);
-  }, [flag]);
 
   return (
     <>
@@ -72,19 +63,7 @@ function SetCarousel({
           </button>
 
           {/* card */}
-          <div className="scene w-full h-96 p-10 m-10">
-            <div
-              className={flip ? "card" : "card is-flip"}
-              onClick={toggleFlip}
-            >
-              <div className="card-face card-face-front">
-                <CarouselCard flashcard={flashcard.front} />
-              </div>
-              <div className="card-face card-face-back">
-                <CarouselCard flashcard={flashcard.back} />
-              </div>
-            </div>
-          </div>
+          <FlashCard front={flashcard.front} back={flashcard.back} />
 
           {/* next-card button */}
           <button className="p-4 w-20 h-20 self-center" onClick={handleNext}>
