@@ -5,7 +5,7 @@ import CardEditors from "../components/CardEditors";
 import NewSetForm from "../components/NewSetForm";
 import SetSelect from "../components/SetSelect";
 import Attachments from "../components/Attachments";
-import { createNewSet } from "../store/sets/setsSlice";
+import { createNewSet, createNewCard } from "../store/sets/setsSlice";
 
 const list = [
   {
@@ -170,7 +170,20 @@ export default function CreateCard() {
       setId: currentSet.id,
     };
 
-    // dispatch(addNewCard({ cardInfo: data }));
+    dispatch(createNewCard(data));
+
+    setFrontContent({
+      text: "",
+      images: [],
+      audio: [],
+    });
+    setBackContent({
+      text: "",
+      images: [],
+      audio: [],
+    });
+
+    setErrorMessage(`Flash Card Added To ${currentSet.title}`);
   };
 
   return (
