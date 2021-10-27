@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import CardEditors from "../components/CardEditors";
 import NewSetForm from "../components/NewSetForm";
@@ -7,27 +7,10 @@ import SetSelect from "../components/SetSelect";
 import Attachments from "../components/Attachments";
 import { createNewSet, createNewCard } from "../store/sets/setsSlice";
 
-const list = [
-  {
-    id: 1,
-    title: "English Vocab",
-  },
-  {
-    id: 2,
-    title: "Algebra",
-  },
-  {
-    id: 3,
-    title: "Human Muscles",
-  },
-  {
-    id: 4,
-    title: "Japanese Katakana",
-  },
-];
-
 export default function CreateCard() {
   const dispatch = useDispatch();
+
+  const sets = useSelector((state) => state.sets.data.mine);
 
   const [currentSet, setCurrentSet] = useState({});
 
@@ -145,7 +128,7 @@ export default function CreateCard() {
   };
 
   const handleCreateCard = () => {
-    if (!currentSet.id) {
+    if (!currentSet.setId) {
       setErrorMessage("Please choose a set");
       return;
     }
@@ -167,7 +150,7 @@ export default function CreateCard() {
     const data = {
       front: frontContent,
       back: backContent,
-      setId: currentSet.id,
+      setId: currentSet.setId,
     };
 
     dispatch(createNewCard(data));
@@ -204,7 +187,7 @@ export default function CreateCard() {
           {isNewSet ? (
             <NewSetForm onSetInfoSubmit={handleNewSetInfo} />
           ) : (
-            <SetSelect onSelect={handleSetSelect} setsList={list} />
+            <SetSelect onSelect={handleSetSelect} setsList={sets} />
           )}
         </div>
       </div>

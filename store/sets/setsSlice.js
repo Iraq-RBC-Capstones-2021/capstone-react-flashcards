@@ -1,8 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+const tempMineSets = [
+  { setId: "8d2DhGMvepnuX1X0YeSE", title: "VLAN" },
+  { setId: "M4GvLlfPz0ooNsgYsv4R", title: "IP Address" },
+];
+
 const initialState = {
   data: {
-    mine: [],
+    mine: [...tempMineSets],
     popular: [],
     suggested: [],
     recent: [],
