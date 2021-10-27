@@ -5,11 +5,7 @@ import * as yup from "yup";
 
 import CategoriesSelect from "./CategoriesSelect";
 
-const categories = [
-  { name: "English", id: "1" },
-  { name: "Math", id: "2" },
-  { name: "Biology", id: "3" },
-];
+const categories = ["English", "Math", "Biology"];
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -39,7 +35,7 @@ export default function NewSetForm({ onSetInfoSubmit }) {
   const handleCategoriesSelect = (categories) => {
     if (categories.length === 0) {
       setCurrentCategories({
-        categories: [{ name: "uncategorized", id: "4" }],
+        categories: ["uncategorized"],
       });
     }
     setCurrentCategories({ categories });
@@ -52,7 +48,7 @@ export default function NewSetForm({ onSetInfoSubmit }) {
     ) {
       onSetInfoSubmit({
         ...data,
-        categories: [{ name: "uncategorized", id: "4" }],
+        categories: ["uncategorized"],
       });
     } else {
       onSetInfoSubmit({ ...currentCategories, ...data });

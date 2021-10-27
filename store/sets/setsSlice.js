@@ -32,14 +32,12 @@ export const createNewSet = createAsyncThunk(
     const userId = firebase.auth().currentUser.uid;
     const userName = firebase.auth().currentUser.displayName;
 
-    const tags = newSet.categories.map((category) => category.name);
-
     const timeStamp = firestore.FieldValue.serverTimestamp;
 
     const data = {
       title: newSet.name,
       description: newSet.description,
-      tags,
+      tags: newSet.categories,
       imageUrl,
       userName,
       userId,
