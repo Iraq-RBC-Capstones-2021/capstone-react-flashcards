@@ -29,7 +29,7 @@ export const createNewSet = createAsyncThunk(
     if (image) {
       const image = newSet.cover[0];
       const storageRef = firebase.storage().ref();
-      const imageRef = storageRef.child(image.name);
+      const imageRef = storageRef.child(`${Date.now()}${image.size}`);
       await imageRef.put(image);
 
       imageUrl = await imageRef.getDownloadURL();
