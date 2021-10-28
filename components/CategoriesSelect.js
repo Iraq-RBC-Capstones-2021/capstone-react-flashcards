@@ -36,7 +36,7 @@ export default function CategoriesSelect({
     if (searchValue !== "") {
       setCategories(
         categoryList.filter((value) =>
-          value.name.toLowerCase().includes(e.target.value.toLowerCase())
+          value.toLowerCase().includes(e.target.value.toLowerCase())
         )
       );
     } else {
@@ -46,7 +46,7 @@ export default function CategoriesSelect({
 
   const handleRemove = (selection) => {
     const filtredCategories = selectedCategories.filter(
-      (value) => value.id !== selection.id
+      (value) => value !== selection
     );
 
     setSelectedCategories(filtredCategories);
@@ -93,7 +93,7 @@ export default function CategoriesSelect({
               onClick={() => handleSelect(category)}
             >
               <label className="cursor-pointer px-2 py-1 text-lg">
-                {category.name}
+                {category}
               </label>
               {index < categoryList.length - 1 && <hr />}
             </div>
@@ -107,7 +107,7 @@ export default function CategoriesSelect({
             onClick={() => handleRemove(selection)}
             className="border pl-1 pr-4  relative rounded-xl border-black text-xs cursor-pointer"
           >
-            {selection.name}
+            {selection}
             <label className="text-xs absolute bottom-1 right-1 cursor-pointer">
               x
             </label>

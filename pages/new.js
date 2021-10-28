@@ -1,37 +1,24 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import CardEditors from "../components/CardEditors";
 import NewSetForm from "../components/NewSetForm";
 import SetSelect from "../components/SetSelect";
 import Attachments from "../components/Attachments";
-import { createNewSet } from "../store/sets/setsSlice";
-
-const list = [
-  {
-    id: 1,
-    title: "English Vocab",
-  },
-  {
-    id: 2,
-    title: "Algebra",
-  },
-  {
-    id: 3,
-    title: "Human Muscles",
-  },
-  {
-    id: 4,
-    title: "Japanese Katakana",
-  },
-];
+import { createNewSet, createNewCard } from "../store/sets/setsSlice";
 
 export default function CreateCard() {
   const dispatch = useDispatch();
 
-  const [currentSet, setCurrentSet] = useState({});
+  const sets = useSelector((state) => state.sets.data.mine);
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const pageStatus = useSelector((state) => state.sets.status);
+
+  const [currentSet, setCurrentSet] = useState(null);
+
+  const [searchValueSet, setSearchValueSet] = useState("");
+
+  const [feedbackMessage, setFeedbackMessage] = useState("");
 
   const [frontContent, setFrontContent] = useState({
     text: "",
@@ -140,13 +127,21 @@ export default function CreateCard() {
     setCurrentSet(selectedSet);
   };
 
+  const handleSearchValueSet = (value) => {
+    setSearchValueSet(value);
+  };
+
   const handleNewSetInfo = (info) => {
     dispatch(createNewSet(info));
+
+    setCurrentSet("");
+
+    setFeedbackMessage(`${info.title} set has been created`);
   };
 
   const handleCreateCard = () => {
-    if (!currentSet.id) {
-      setErrorMessage("Please choose a set");
+    if (!currentSet) {
+      setFeedbackMessage("Please choose a set");
       return;
     }
 
@@ -158,20 +153,54 @@ export default function CreateCard() {
       backContent.images.length <= 0 &&
       backContent.audio.length <= 0
     ) {
-      setErrorMessage("Please add content");
+      setFeedbackMessage("Please add content");
       return;
     }
 
-    setErrorMessage("");
+    setFeedbackMessage("");
 
     const data = {
       front: frontContent,
       back: backContent,
-      setId: currentSet.id,
+      setId: currentSet.setId,
     };
 
-    // dispatch(addNewCard({ cardInfo: data }));
+    dispatch(createNewCard(data));
+
+    setFrontContent({
+      text: "",
+      images: [],
+      audio: [],
+    });
+    setBackContent({
+      text: "",
+      images: [],
+      audio: [],
+    });
+
+    setFeedbackMessage(`Flash Card Added To ${currentSet.title}`);
   };
+
+  useEffect(() => {
+    if (
+      Object.prototype.toString.call(currentSet) === "[object String]" &&
+      !isNewSet
+    ) {
+      const { title } = sets[sets.length - 1];
+      setCurrentSet(sets[sets.length - 1]);
+      setSearchValueSet(title);
+    }
+  }, [sets, currentSet, isNewSet]);
+
+  useEffect(() => {
+    if (searchValueSet === "") {
+      setCurrentSet(null);
+    }
+  }, [searchValueSet]);
+
+  if (pageStatus === "loading") return <h1>Loading....</h1>;
+
+  if (pageStatus === "error") setFeedbackMessage("Something Went Wrong");
 
   return (
     <div className="px-32 flex flex-col justify-between">
@@ -191,10 +220,19 @@ export default function CreateCard() {
           {isNewSet ? (
             <NewSetForm onSetInfoSubmit={handleNewSetInfo} />
           ) : (
-            <SetSelect onSelect={handleSetSelect} setsList={list} />
+            <SetSelect
+              onSelect={handleSetSelect}
+              setsList={sets}
+              searchValue={searchValueSet}
+              onSearchValueChange={handleSearchValueSet}
+            />
           )}
         </div>
       </div>
+
+      {feedbackMessage && (
+        <h5 className="text-xl mb-5 text-primary">{feedbackMessage}</h5>
+      )}
 
       <Attachments
         front={frontContent}
@@ -202,9 +240,6 @@ export default function CreateCard() {
         onFileRemove={handleFileRemove}
       />
 
-      {errorMessage && (
-        <h5 className="pl-16 mt-5 text-xl text-primary">{errorMessage}</h5>
-      )}
       <CardEditors
         frontContent={frontContent}
         backContent={backContent}
