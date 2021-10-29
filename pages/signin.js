@@ -6,14 +6,24 @@ import user from "../public/assets/svg/User.svg";
 import { useForm } from "react-hook-form";
 // Logo
 import googleLogo from "../public/assets/Google.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   signInWithEmailAndPassword,
   signInWithGoogle,
 } from "../store/user/userSlice";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
 const Signin = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const signInStatus = useSelector((state) => state.user.status);
+
+  useEffect(() => {
+    if (signInStatus === "success") {
+      router.push("/home");
+    }
+  }, [signInStatus, router]);
 
   const {
     register,
