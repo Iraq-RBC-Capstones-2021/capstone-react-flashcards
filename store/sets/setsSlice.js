@@ -1,17 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const tempMineSets = [
-  { setId: "8d2DhGMvepnuX1X0YeSE", title: "VLAN" },
-  { setId: "M4GvLlfPz0ooNsgYsv4R", title: "IP Address" },
-];
-
 const initialState = {
   data: {
-    mine: [...tempMineSets],
+    mine: [],
     popular: [],
     suggested: [],
     recent: [],
-    cards: [],
+    top: [],
   },
   status: "idle",
 };
@@ -29,26 +24,27 @@ export const createNewSet = createAsyncThunk(
     if (image) {
       const image = newSet.cover[0];
       const storageRef = firebase.storage().ref();
-      const imageRef = storageRef.child(`${Date.now()}${image.size}`);
+      const imageRef = storageRef.child(image.name);
       await imageRef.put(image);
 
       imageUrl = await imageRef.getDownloadURL();
     }
 
-    const currentUser = firebase.auth().currentUser;
+    const userId = firebase.auth().currentUser.uid;
+    const userName = firebase.auth().currentUser.displayName;
+
+    const tags = newSet.categories.map((category) => category.name);
 
     const timeStamp = firestore.FieldValue.serverTimestamp;
 
     const data = {
-      title: newSet.title,
+      title: newSet.name,
       description: newSet.description,
-      tags: newSet.categories,
+      tags,
       imageUrl,
-      userName: currentUser.displayName,
-      userId: currentUser.uid,
-      avatar: currentUser.photoURL,
+      userName,
+      userId,
       createdAt: timeStamp(),
-      cardCount: 0,
     };
 
     const doc = await firestore.add({ collection: "sets" }, data);
@@ -60,59 +56,90 @@ export const createNewSet = createAsyncThunk(
   }
 );
 
-const uploadFilesArray = async (files, setId, storageRef) => {
-  if (files.length <= 0) return null;
-
-  return await Promise.all(
-    files.map(async (file, index) => {
-      const fileName = `${setId}${Date.now()}${file.size}${index}`;
-      const fileRef = storageRef.child(fileName);
-      await fileRef.put(file);
-      const url = await fileRef.getDownloadURL();
-
-      return url;
-    })
-  );
-};
-
-export const createNewCard = createAsyncThunk(
-  "sets/createNewCard",
-  async ({ front, back, setId }, thunkapi) => {
-    const { getFirestore, getFirebase } = thunkapi.extra;
-    const firebase = getFirebase();
+// Recent Sets
+export const getRecentSets = createAsyncThunk(
+  "sets/getRecentSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
     const firestore = getFirestore();
-    const storageRef = firebase.storage().ref();
 
-    const data = {
-      front: {
-        text: front.text,
-        images: await uploadFilesArray(front.images, setId, storageRef),
-        audio: await uploadFilesArray(front.audio, setId, storageRef),
-      },
-      back: {
-        text: back.text,
-        images: await uploadFilesArray(back.images, setId, storageRef),
-        audio: await uploadFilesArray(back.audio, setId, storageRef),
-      },
-      setId,
-    };
+    const collection = await firestore.get({
+      collection: "sets",
+      orderBy: "createdAt",
+      limit: 6,
+    });
 
-    const doc = await firestore.add({ collection: "cards" }, data);
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    return sets;
+  }
+);
+// Suggested Sets
+export const getSuggestedSets = createAsyncThunk(
+  "sets/getSuggestedSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
 
-    await firestore
-      .collection("sets")
-      .doc(setId)
-      .set(
-        {
-          cardCount: firestore.FieldValue.increment(1),
-        },
-        { merge: true }
-      );
+    const collection = await firestore.get({
+      collection: "sets",
+      orderBy: ["createdAt", "asc"],
+      limit: 6,
+    });
 
-    return {
-      ...data,
-      cardId: doc.id,
-    };
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    sets.sort(() => Math.random() - 0.5);
+    return sets;
+  }
+);
+// Popular Sets
+export const getPopularSets = createAsyncThunk(
+  "sets/getPopularSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "sets",
+      where: ["views", ">=", 0],
+      orderBy: ["views", "desc"],
+      limit: 6,
+    });
+
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    return sets;
+  }
+);
+// Top Categories Sets
+export const getTopCategoriesSets = createAsyncThunk(
+  "sets/getTopCategoriesSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "sets",
+      //  where: ["tags"],
+      limit: 3,
+    });
+
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    return sets;
   }
 );
 
@@ -125,20 +152,54 @@ const setsSlice = createSlice({
       state.status = "loading";
     },
     [createNewSet.fulfilled]: (state, action) => {
-      state.data.mine.push(action.payload);
       state.status = "idle";
+      state.data.mine.push(action.payload);
     },
     [createNewSet.rejected]: (state) => {
       state.status = "error";
     },
-    [createNewCard.pending]: (state) => {
+    // Recent sets
+    [getRecentSets.pending]: (state) => {
       state.status = "loading";
     },
-    [createNewCard.fulfilled]: (state, action) => {
-      state.data.cards.push(action.payload);
+    [getRecentSets.fulfilled]: (state, action) => {
       state.status = "idle";
+      state.data.recent = action.payload;
     },
-    [createNewCard.rejected]: (state) => {
+    [getRecentSets.rejected]: (state) => {
+      state.status = "error";
+    },
+    // Suggested Sets
+    [getSuggestedSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getSuggestedSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.suggested = action.payload;
+    },
+    [getSuggestedSets.rejected]: (state) => {
+      state.status = "error";
+    },
+    // Popular Sets
+    [getPopularSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getPopularSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.popular = action.payload;
+    },
+    [getPopularSets.rejected]: (state) => {
+      state.status = "error";
+    },
+    // Top Categories Sets
+    [getTopCategoriesSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getTopCategoriesSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.top = action.payload;
+    },
+    [getTopCategoriesSets.rejected]: (state) => {
       state.status = "error";
     },
   },

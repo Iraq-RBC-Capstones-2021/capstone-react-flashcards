@@ -30,7 +30,7 @@ export default function Card({
       <div>
         <Image
           className="rounded-b-3xl"
-          src={imageUrl}
+          src={imageUrl ? imageUrl : imagePlaceHolder}
           blur="true"
           blurDataURL={imagePlaceHolder}
           alt={`${title}'s cover`}
