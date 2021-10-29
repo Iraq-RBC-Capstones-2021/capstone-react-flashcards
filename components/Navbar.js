@@ -1,13 +1,52 @@
 import Link from "next/link";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import Image from "next/image";
 
 import Search from "./Search";
+import data from "../sets.js";
 
 function Navbar() {
+  const [open, setOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
+
+  const status = useSelector((state) => state.user.status);
+  const name = useSelector((state) => state.user.data.displayName);
+  const photoURL = useSelector((state) => state.user.data.photoURL);
+  const userID = useSelector((state) => state.user.uid);
+
+  let Avatar = "/assets/Avatar.png";
+
+  const photo = () => {
+    if (photoURL == null) {
+      return (
+        <Image
+          src={Avatar}
+          alt={name == null ? "avatar" : name}
+          height={40}
+          width={40}
+          className="rounded-full"
+        />
+      );
+    } else {
+      return (
+        <img
+          src={photoURL}
+          alt={name == null ? "avatar" : name}
+          height={40}
+          width={40}
+          className="rounded-full"
+        />
+      );
+    }
+  };
+
   return (
     <nav>
-      <div className="flex flex-row py-2 border-b border-grey justify-between">
+      <div className="flex flex-row w-full p-2 border-b border-grey justify-between">
         {/* logo */}
-        <Link href="/">
+        <Link href={status == "idle" ? "/" : "/home"}>
           <a className="flex items-center pr-4">
             <svg
               width="125"
@@ -52,21 +91,62 @@ function Navbar() {
 
         {/* nav links */}
         <div className="hidden lg:flex lg:flex-row items-center space-x-2">
-          <Link href="/">
-            <a className="py-1 px-2 hover:bg-grey rounded-lg transition duration-300">
+          <Link href={status == "idle" ? "/" : "/home"}>
+            <a className="py-1.5 px-2 hover:bg-grey rounded-lg transition duration-300">
               Home
             </a>
           </Link>
-          <Link href="/categories">
-            <a className="py-1 px-2 hover:bg-grey rounded-lg transition duration-300">
-              Categories
+          <div
+            className="relative"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            <a className="inline-flex items-center py-1.5 px-2 hover:bg-grey rounded-lg transition duration-300 space-x-1.5">
+              <div>Categories</div>
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M20.2567 6.33104C20.6262 5.92053 21.2585 5.88726 21.669 6.25671C22.0795 6.62617 22.1128 7.25846 21.7433 7.66897L12.7433 17.669C12.3461 18.1104 11.654 18.1104 11.2567 17.669L2.25671 7.66897C1.88726 7.25846 1.92053 6.62617 2.33104 6.25671C2.74155 5.88726 3.37384 5.92053 3.7433 6.33104L12 15.5052L20.2567 6.33104Z"
+                  fill="#1A1A1A"
+                />
+              </svg>
             </a>
-          </Link>
-          <Link href="/library">
-            <a className="py-1 px-2 hover:bg-grey rounded-lg transition duration-300">
-              My library
-            </a>
-          </Link>
+            {isHovered && (
+              <div className="absolute -right-32 flex bg-white shadow-md rounded-lg p-2 text-center transition duration-300 z-10">
+                {data.top_categories.map((category) => (
+                  <div key={category.name} className="">
+                    <Link href={`/search/${category.name.toLowerCase()}`}>
+                      <a className="block px-4 py-1 font-medium rounded-lg hover:bg-grey transition duration-300">
+                        {category.name}
+                      </a>
+                    </Link>
+                    {category.categories.map((subCategory) => (
+                      <Link
+                        href={`/search/${subCategory.toLowerCase()}`}
+                        key={subCategory}
+                      >
+                        <a className="block px-4 py-1 rounded-lg hover:bg-grey transition duration-300">
+                          {subCategory}
+                        </a>
+                      </Link>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {status !== "idle" && (
+            <Link href={`/library/${userID}`}>
+              <a className="py-1.5 px-2 hover:bg-grey rounded-lg transition duration-300">
+                My library
+              </a>
+            </Link>
+          )}
           <Link href="/new">
             <a className="btn-primary">
               <b>+</b> Create
@@ -75,68 +155,165 @@ function Navbar() {
         </div>
 
         {/* search box */}
-        <div className="flex items-center mx-4">
+        <div className="hidden lg:flex items-center mx-4">
           <Search />
         </div>
 
         {/* other nav links */}
-        <div className="hidden lg:flex items-center space-x-3 ">
-          <Link href="/register">
-            <a className="btn-secondary">Register</a>
-          </Link>
-          <Link href="/signin">
-            <a className="btn-primary">Sign in</a>
-          </Link>
-        </div>
+        {status == "idle" ? (
+          <div className="hidden lg:flex items-center justify-end space-x-3">
+            <Link href="/register">
+              <a className="btn-secondary">Register</a>
+            </Link>
+            <Link href="/signin">
+              <a className="btn-primary">Sign in</a>
+            </Link>
+          </div>
+        ) : (
+          <div className="flex items-center justify-end flex-grow lg:flex-grow-0 space-x-3">
+            <svg
+              width="30"
+              height="30"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="mr-4"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M28.3386 34.766C28.5516 34.3184 28.6622 33.829 28.6622 33.3333H33.3334C35.1743 33.3333 36.6667 31.841 36.6667 30V26.7042C36.6667 25.613 36.1327 24.591 35.2369 23.9678L31.875 21.6291V12.6361C31.875 5.98126 26.3705 2.5 20 2.5C13.6295 2.5 8.12504 6.10472 8.12504 12.6361V21.6291L4.76316 23.9678C3.86742 24.591 3.33337 25.613 3.33337 26.7042V30C3.33337 31.841 4.82576 33.3333 6.66671 33.3333H11.3371C11.3368 33.8142 11.441 34.3028 11.6615 34.7659C13.0631 37.7105 15.9471 39.1667 20 39.1667C24.053 39.1667 26.937 37.7105 28.3386 34.766ZM20 36.25C17.1312 36.25 15.4594 34.9892 14.6712 33.3333L25.3289 33.3333C24.5406 34.9892 22.8688 36.25 20 36.25Z"
+                fill="#1A1A1A"
+              />
+            </svg>
+            {photo()}
+          </div>
+        )}
 
         {/* mobile menu icon */}
-        <div className="block lg:hidden align-middle align-center m-auto ml-96">
-          <button className="px-3 py-2 border rounded text-black border-black hover:text-primary hover:border-primary">
-            <svg
-              className="fill-current h-3 w-3"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <title>Menu</title>
-              <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
-            </svg>
+        <div className="flex items-center mx-2 lg:hidden">
+          <button
+            className="flex p-2.5 rounded-md border-2 border-black hover:text-primary hover:border-primary transition duration-300"
+            onClick={() => setOpen(!open)}
+          >
+            {!open ? (
+              <svg
+                className="fill-current w-3"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z" />
+              </svg>
+            ) : (
+              <svg
+                className="fill-current w-3"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M13.4132 12L20.6897 19.278C21.6306 20.2191 20.2192 21.6308 19.2783 20.6896L12 13.4099L4.72169 20.6896C3.78076 21.6308 2.36938 20.2191 3.3103 19.278L10.5868 12L3.3103 4.72203C2.36938 3.78092 3.78076 2.36925 4.72169 3.31036L12 10.5901L19.2783 3.31036C20.2192 2.36925 21.6306 3.78092 20.6897 4.72203L13.4132 12Z" />
+              </svg>
+            )}
           </button>
         </div>
       </div>
 
       {/* mobile view */}
-      <div className="w-full block lg:hidden border-b border-grey pb-2">
-        <Link href="/">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
-            Home
-          </a>
-        </Link>
-        <Link href="/categories">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
-            Categories
-          </a>
-        </Link>
-        <Link href="/library">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
-            My library
-          </a>
-        </Link>
-        <Link href="/new">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
-            Create
-          </a>
-        </Link>
-        <Link href="/register">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
-            Register
-          </a>
-        </Link>
-        <Link href="/signin">
-          <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
-            Sign in
-          </a>
-        </Link>
-      </div>
+      {open && (
+        <div className="w-full block lg:hidden border-b border-grey pb-2 transition duration-300">
+          <Link href={status == "idle" ? "/" : "/home"}>
+            <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
+              Home
+            </a>
+          </Link>
+          <div onClick={() => setIsClicked(!isClicked)}>
+            <a className="flex mt-4 p-2 rounded-lg space-x-2 items-center hover:bg-grey cursor-pointer transition duration-300">
+              <span>Categories</span>
+              {isClicked ? (
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.2567 17.669L12 8.49485L3.7433 17.669C3.37384 18.0795 2.74155 18.1128 2.33104 17.7433C1.92053 17.3738 1.88726 16.7415 2.25671 16.331L11.2567 6.33104C11.654 5.88965 12.3461 5.88965 12.7433 6.33104L21.7433 16.331C22.1128 16.7415 22.0795 17.3738 21.669 17.7433C21.2585 18.1128 20.6262 18.0795 20.2567 17.669Z"
+                    fill="#1A1A1A"
+                  />
+                </svg>
+              ) : (
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M20.2567 6.33104C20.6262 5.92053 21.2585 5.88726 21.669 6.25671C22.0795 6.62617 22.1128 7.25846 21.7433 7.66897L12.7433 17.669C12.3461 18.1104 11.654 18.1104 11.2567 17.669L2.25671 7.66897C1.88726 7.25846 1.92053 6.62617 2.33104 6.25671C2.74155 5.88726 3.37384 5.92053 3.7433 6.33104L12 15.5052L20.2567 6.33104Z"
+                    fill="#1A1A1A"
+                  />
+                </svg>
+              )}
+            </a>
+            {isClicked && (
+              <div className="flex p-2 text-center transition duration-300">
+                {data.top_categories.map((category) => (
+                  <div key={category.name} className="">
+                    <Link href={`/search/${category.name.toLowerCase()}`}>
+                      <a className="block px-4 py-1 font-medium rounded-lg hover:bg-grey transition duration-300">
+                        {category.name}
+                      </a>
+                    </Link>
+                    {category.categories.map((subCategory) => (
+                      <Link
+                        href={`/search/${subCategory.toLowerCase()}`}
+                        key={subCategory}
+                      >
+                        <a className="block px-4 py-1 rounded-lg hover:bg-grey transition duration-300">
+                          {subCategory}
+                        </a>
+                      </Link>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {status !== "idle" && (
+            <Link href={`/library/${userID}`}>
+              <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
+                My library
+              </a>
+            </Link>
+          )}
+          <Link href="/new">
+            <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
+              Create
+            </a>
+          </Link>
+
+          {/* search box */}
+          <div className="flex items-center mt-4 p-2">
+            <Search />
+          </div>
+
+          {status == "idle" && (
+            <>
+              <Link href="/register">
+                <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
+                  Register
+                </a>
+              </Link>
+              <Link href="/signin">
+                <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
+                  Sign in
+                </a>
+              </Link>
+            </>
+          )}
+        </div>
+      )}
     </nav>
   );
 }

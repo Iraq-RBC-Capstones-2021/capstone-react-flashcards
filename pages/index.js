@@ -9,7 +9,7 @@ export default function Home() {
       <Head>
         <title>eduCards</title>
         <meta name="description" content="Make Flashcards Easily" />
-        <link rel="icon" href="/card-logo.png" />
+        <link rel="icon" href="/assets/card-logo.ico" />
       </Head>
 
       <div>
