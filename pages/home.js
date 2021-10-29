@@ -71,10 +71,7 @@ export default function Home() {
           <i className="fas fa-chevron-right fa-sm mr-4"></i>
           Latest
         </p>
-        <Carsouel>
-          {/* {latestSets.map(allSets)} */}
-          {recentSets.map(allSets)}
-        </Carsouel>
+        <Carsouel>{recentSets.map(allSets)}</Carsouel>
 
         <p className="font-medium text-2xl mt-12">
           <i className="fas fa-chevron-right fa-sm mr-4"></i>
