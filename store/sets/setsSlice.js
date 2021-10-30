@@ -12,6 +12,7 @@ const initialState = {
     suggested: [],
     recent: [],
     cards: [],
+    library: [],
   },
   status: "idle",
 };
@@ -116,6 +117,75 @@ export const createNewCard = createAsyncThunk(
   }
 );
 
+export const addSetToLibrary = createAsyncThunk(
+  "sets/addSetToLibrary",
+  async (setId, thunkapi) => {
+    const { getFirestore, getFirebase } = thunkapi.extra;
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    const uid = firebase.auth().currentUser.uid;
+
+    const data = {
+      setId,
+      createdAt: Date.now(),
+    };
+
+    await firestore
+      .collection("library")
+      .doc(uid)
+      .set(
+        {
+          data: firestore.FieldValue.arrayUnion(data),
+        },
+        { merge: true }
+      );
+
+    return data;
+  }
+);
+
+export const removeSetFromLibrary = createAsyncThunk(
+  "sets/removeSetFromLibrary",
+  async (setId, thunkapi) => {
+    const { getFirestore, getFirebase } = thunkapi.extra;
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    const uid = firebase.auth().currentUser.uid;
+    const library = thunkapi.getState().sets.data.library;
+
+    const setInfo = library.find((set) => set.setId === setId);
+
+    await firestore
+      .collection("library")
+      .doc(uid)
+      .set(
+        {
+          data: firestore.FieldValue.arrayRemove(setInfo),
+        },
+        { merge: true }
+      );
+
+    return setInfo;
+  }
+);
+
+export const getLibrarySets = createAsyncThunk(
+  "sets/getLibrarySets",
+  async (_, thunkapi) => {
+    const { getFirestore, getFirebase } = thunkapi.extra;
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    const uid = firebase.auth().currentUser.uid;
+
+    const doc = await firestore.get({
+      collection: "library",
+      doc: uid,
+    });
+
+    return doc.data();
+  }
+);
+
 const setsSlice = createSlice({
   name: "sets",
   initialState,
@@ -139,6 +209,42 @@ const setsSlice = createSlice({
       state.status = "idle";
     },
     [createNewCard.rejected]: (state) => {
+      state.status = "error";
+    },
+    [addSetToLibrary.pending]: (state) => {
+      state.status = "loading";
+    },
+    [addSetToLibrary.fulfilled]: (state, action) => {
+      state.data.library.push(action.payload);
+      state.status = "idle";
+    },
+    [addSetToLibrary.rejected]: (state) => {
+      state.status = "error";
+    },
+    [removeSetFromLibrary.pending]: (state) => {
+      state.status = "loading";
+    },
+    [removeSetFromLibrary.fulfilled]: (state, action) => {
+      const newLibrary = state.data.library.filter(
+        (set) => set.setId !== action.payload.setId
+      );
+
+      state.data.library = newLibrary;
+
+      state.status = "idle";
+    },
+    [removeSetFromLibrary.rejected]: (state) => {
+      state.status = "error";
+    },
+
+    [getLibrarySets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getLibrarySets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.library = action.payload;
+    },
+    [getLibrarySets.rejected]: (state) => {
       state.status = "error";
     },
   },
