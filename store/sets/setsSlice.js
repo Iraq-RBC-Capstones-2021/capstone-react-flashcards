@@ -127,7 +127,7 @@ export const addSetToLibrary = createAsyncThunk(
 
     const data = {
       setId,
-      createdAt: Date.now(),
+      addedAt: Date.now(),
     };
 
     await firestore
