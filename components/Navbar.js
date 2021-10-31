@@ -11,19 +11,16 @@ function Navbar() {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
-  const status = useSelector((state) => state.user.status);
-  const name = useSelector((state) => state.user.data.displayName);
-  const photoURL = useSelector((state) => state.user.data.photoURL);
-  const userID = useSelector((state) => state.user.uid);
+  const userData = useSelector((state) => state.user.data);
 
   let Avatar = "/assets/Avatar.png";
 
   const photo = () => {
-    if (photoURL == null) {
+    if (userData.photoURL == null) {
       return (
         <Image
           src={Avatar}
-          alt={name == null ? "avatar" : name}
+          alt={userData.name == null ? "avatar" : userData.name}
           height={40}
           width={40}
           className="rounded-full"
@@ -32,8 +29,8 @@ function Navbar() {
     } else {
       return (
         <img
-          src={photoURL}
-          alt={name == null ? "avatar" : name}
+          src={userData.photoURL}
+          alt={userData.name == null ? "avatar" : userData.name}
           height={40}
           width={40}
           className="rounded-full"
@@ -46,7 +43,7 @@ function Navbar() {
     <nav>
       <div className="flex flex-row w-full p-2 border-b border-grey justify-between">
         {/* logo */}
-        <Link href={status == "idle" ? "/" : "/home"}>
+        <Link href={userData == null ? "/" : "/home"}>
           <a className="flex items-center pr-4">
             <svg
               width="125"
@@ -91,7 +88,7 @@ function Navbar() {
 
         {/* nav links */}
         <div className="hidden lg:flex lg:flex-row items-center space-x-2">
-          <Link href={status == "idle" ? "/" : "/home"}>
+          <Link href={userData == null ? "/" : "/home"}>
             <a className="py-1.5 px-2 hover:bg-grey rounded-lg transition duration-300">
               Home
             </a>
@@ -140,8 +137,8 @@ function Navbar() {
               </div>
             )}
           </div>
-          {status !== "idle" && (
-            <Link href={`/library/${userID}`}>
+          {userData !== null && (
+            <Link href={`/library/${userData.uid}`}>
               <a className="py-1.5 px-2 hover:bg-grey rounded-lg transition duration-300">
                 My library
               </a>
@@ -160,7 +157,7 @@ function Navbar() {
         </div>
 
         {/* other nav links */}
-        {status == "idle" ? (
+        {userData === null ? (
           <div className="hidden lg:flex items-center justify-end space-x-3">
             <Link href="/register">
               <a className="btn-secondary">Register</a>
@@ -220,7 +217,7 @@ function Navbar() {
       {/* mobile view */}
       {open && (
         <div className="w-full block lg:hidden border-b border-grey pb-2 transition duration-300">
-          <Link href={status == "idle" ? "/" : "/home"}>
+          <Link href={userData == null ? "/" : "/home"}>
             <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
               Home
             </a>
@@ -280,8 +277,8 @@ function Navbar() {
               </div>
             )}
           </div>
-          {status !== "idle" && (
-            <Link href={`/library/${userID}`}>
+          {userData !== null && (
+            <Link href={`/library/${userData.uid}`}>
               <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
                 My library
               </a>
@@ -298,7 +295,7 @@ function Navbar() {
             <Search />
           </div>
 
-          {status == "idle" && (
+          {userData == null && (
             <>
               <Link href="/register">
                 <a className="block mt-4 p-2 rounded-lg hover:bg-grey transition duration-300">
