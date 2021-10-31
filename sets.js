@@ -215,7 +215,7 @@ const data = {
       categories: ["React", "Java", "Node"],
     },
     {
-      id: "2",
+      id: "3",
       name: "Language",
       categories: ["Japanse", "English", "Italin"],
     },
