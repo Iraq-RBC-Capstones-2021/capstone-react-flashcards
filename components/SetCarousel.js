@@ -1,6 +1,6 @@
 import CarouselCard from "./CarouselCard";
 import FlashCard from "./FlashCard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function SetCarousel({
   set = [
@@ -22,7 +22,7 @@ function SetCarousel({
   getCurrentCard,
 }) {
   const [flag, setFlag] = useState(0);
-
+  const [flip, setFlip] = useState(false);
   const flashcard = set[flag];
 
   const handlePrevious = () => {
@@ -38,6 +38,10 @@ function SetCarousel({
       setFlip(true);
     }
   };
+
+  useEffect(() => {
+    getCurrentCard(flag);
+  }, [flag, getCurrentCard]);
 
   return (
     <>
