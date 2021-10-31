@@ -12,7 +12,6 @@ const initialState = {
     suggested: [],
     recent: [],
     cards: [],
-    top: [],
   },
   status: "idle",
 };
@@ -182,27 +181,6 @@ export const getPopularSets = createAsyncThunk(
     return sets;
   }
 );
-// Top Categories Sets
-export const getTopCategoriesSets = createAsyncThunk(
-  "sets/getTopCategoriesSets",
-  async (_, thunkapi) => {
-    const { getFirestore } = thunkapi.extra;
-    const firestore = getFirestore();
-
-    const collection = await firestore.get({
-      collection: "sets",
-      //    where: ["tags"],
-      limit: 3,
-    });
-
-    const sets = [];
-    collection.forEach((doc) => {
-      const data = doc.data();
-      sets.push({ ...data, setId: doc.id });
-    });
-    return sets;
-  }
-);
 
 const setsSlice = createSlice({
   name: "sets",
@@ -260,17 +238,6 @@ const setsSlice = createSlice({
       state.data.popular = action.payload;
     },
     [getPopularSets.rejected]: (state) => {
-      state.status = "error";
-    },
-    // Top Categories Sets
-    [getTopCategoriesSets.pending]: (state) => {
-      state.status = "loading";
-    },
-    [getTopCategoriesSets.fulfilled]: (state, action) => {
-      state.status = "idle";
-      state.data.top = action.payload;
-    },
-    [getTopCategoriesSets.rejected]: (state) => {
       state.status = "error";
     },
   },

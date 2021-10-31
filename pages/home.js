@@ -2,7 +2,7 @@ import styles from "../styles/Home.module.css";
 import Carsouel from "../components/CarouselPage";
 import Category from "../components/Category";
 import Card from "../components/Card";
-//import data from "../sets.js";
+import data from "../sets.js";
 import { SwiperSlide } from "swiper/react";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,14 +10,12 @@ import {
   getRecentSets,
   getSuggestedSets,
   getPopularSets,
-  getTopCategoriesSets,
 } from "../store/sets/setsSlice";
 
 export default function Home() {
   const recentSets = useSelector((state) => state.sets.data.recent);
   const suggestedSets = useSelector((state) => state.sets.data.suggested);
   const popularSets = useSelector((state) => state.sets.data.popular);
-  const topCategories = useSelector((state) => state.sets.data.top);
 
   const dispatch = useDispatch();
 
@@ -25,14 +23,13 @@ export default function Home() {
     dispatch(getRecentSets());
     dispatch(getSuggestedSets());
     dispatch(getPopularSets());
-    dispatch(getTopCategoriesSets());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const popularSets = data.Popular;
   // const latestSets = data.Latest;
   // const suggestedSets = data.Suggested;
-  // const topCategories = data.top_categories;
+  const topCategories = data.top_categories;
 
   const allSets = (set) => {
     return (
@@ -55,7 +52,7 @@ export default function Home() {
   };
 
   const allTopCategories = (cat) => {
-    return <Category name={cat.name} categories={cat.categories} />;
+    return <Category name={cat.name} categories={cat.categories} id={cat.id} />;
   };
 
   return (
