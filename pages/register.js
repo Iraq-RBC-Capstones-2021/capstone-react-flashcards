@@ -12,13 +12,13 @@ import { registerWithEmailAndPassword } from "../store/user/userSlice";
 const Signup = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const signUpStatus = useSelector((state) => state.user.status);
+  const user = useSelector((state) => state.user.data);
 
   useEffect(() => {
-    if (signUpStatus === "success") {
+    if (user) {
       router.push("/home");
     }
-  }, [signUpStatus, router]);
+  }, [user, router]);
 
   const {
     register,

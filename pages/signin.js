@@ -17,13 +17,13 @@ import React, { useEffect } from "react";
 const Signin = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const signInStatus = useSelector((state) => state.user.status);
+  const user = useSelector((state) => state.user.data);
 
   useEffect(() => {
-    if (signInStatus === "success") {
+    if (user) {
       router.push("/home");
     }
-  }, [signInStatus, router]);
+  }, [user, router]);
 
   const {
     register,
