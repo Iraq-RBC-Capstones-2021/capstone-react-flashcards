@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Head from "next/head";
 import "swiper/css/bundle";
 
-import { getLibrarySets } from "../store/sets/setsSlice";
+import { getLibraryInfoIds } from "../store/sets/setsSlice";
 import { wrapper } from "../store";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
@@ -14,7 +14,7 @@ const App = ({ Component, pageProps }) => {
 
   useEffect(() => {
     if (user) {
-      dispatch(getLibrarySets());
+      dispatch(getLibraryInfoIds());
     }
   }, [user, dispatch]);
 

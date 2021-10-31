@@ -12,7 +12,7 @@ const initialState = {
     suggested: [],
     recent: [],
     cards: [],
-    library: [],
+    libraryInfoIds: [],
   },
   status: "idle",
 };
@@ -151,9 +151,9 @@ export const removeSetFromLibrary = createAsyncThunk(
     const firestore = getFirestore();
     const firebase = getFirebase();
     const uid = firebase.auth().currentUser.uid;
-    const library = thunkapi.getState().sets.data.library;
+    const libraryInfoIds = thunkapi.getState().sets.data.libraryInfoIds;
 
-    const setInfo = library.find((set) => set.setId === setId);
+    const setInfo = libraryInfoIds.find((set) => set.setId === setId);
 
     await firestore
       .collection("library")
@@ -169,8 +169,8 @@ export const removeSetFromLibrary = createAsyncThunk(
   }
 );
 
-export const getLibrarySets = createAsyncThunk(
-  "sets/getLibrarySets",
+export const getLibraryInfoIds = createAsyncThunk(
+  "sets/getLibraryInfoIds",
   async (_, thunkapi) => {
     const { getFirestore, getFirebase } = thunkapi.extra;
     const firestore = getFirestore();
@@ -182,7 +182,7 @@ export const getLibrarySets = createAsyncThunk(
       doc: uid,
     });
 
-    return doc.data();
+    return doc.data().data;
   }
 );
 
@@ -215,7 +215,7 @@ const setsSlice = createSlice({
       state.status = "loading";
     },
     [addSetToLibrary.fulfilled]: (state, action) => {
-      state.data.library.push(action.payload);
+      state.data.libraryInfoIds.push(action.payload);
       state.status = "idle";
     },
     [addSetToLibrary.rejected]: (state) => {
@@ -225,11 +225,11 @@ const setsSlice = createSlice({
       state.status = "loading";
     },
     [removeSetFromLibrary.fulfilled]: (state, action) => {
-      const newLibrary = state.data.library.filter(
+      const newLibrary = state.data.libraryInfoIds.filter(
         (set) => set.setId !== action.payload.setId
       );
 
-      state.data.library = newLibrary;
+      state.data.libraryInfoIds = newLibrary;
 
       state.status = "idle";
     },
@@ -237,14 +237,14 @@ const setsSlice = createSlice({
       state.status = "error";
     },
 
-    [getLibrarySets.pending]: (state) => {
+    [getLibraryInfoIds.pending]: (state) => {
       state.status = "loading";
     },
-    [getLibrarySets.fulfilled]: (state, action) => {
+    [getLibraryInfoIds.fulfilled]: (state, action) => {
       state.status = "idle";
-      state.data.library = action.payload;
+      state.data.libraryInfoIds = action.payload;
     },
-    [getLibrarySets.rejected]: (state) => {
+    [getLibraryInfoIds.rejected]: (state) => {
       state.status = "error";
     },
   },

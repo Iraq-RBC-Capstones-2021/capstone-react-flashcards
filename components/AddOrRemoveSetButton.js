@@ -3,18 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { addSetToLibrary, removeSetFromLibrary } from "../store/sets/setsSlice";
 
 export default function AddOrRemoveSetButton({ setId, className }) {
-  const library = useSelector((state) => state.sets.data.library);
+  const libraryInfoIds = useSelector((state) => state.sets.data.libraryInfoIds);
   const dispatch = useDispatch();
 
   const [isInLibrary, setIsInlibrary] = useState();
 
   useEffect(() => {
-    if (library.some((set) => set.setId === setId)) {
+    if (libraryInfoIds.some((set) => set.setId === setId)) {
       setIsInlibrary(true);
     } else {
       setIsInlibrary(false);
     }
-  }, [setId, library]);
+  }, [setId, libraryInfoIds]);
 
   const addOrRemoveSet = () => {
     if (isInLibrary) {
