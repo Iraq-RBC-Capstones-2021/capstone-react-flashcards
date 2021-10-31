@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   data: null,
-  status: "",
+  status: "idle",
   errorMessage: "",
 };
 
@@ -126,7 +126,7 @@ const userSlice = createSlice({
       state.status = "loading";
     },
     [registerWithEmailAndPassword.fulfilled]: (state, action) => {
-      state.status = "success";
+      state.status = "idle";
       state.errorMessage = "";
       state.data = action.payload;
     },
@@ -139,7 +139,7 @@ const userSlice = createSlice({
       state.status = "loading";
     },
     [signInWithEmailAndPassword.fulfilled]: (state, action) => {
-      state.status = "success";
+      state.status = "idle";
       state.errorMessage = "";
       state.data = action.payload;
     },
@@ -165,7 +165,7 @@ const userSlice = createSlice({
       state.status = "loading";
     },
     [signInWithGoogle.fulfilled]: (state, action) => {
-      state.status = "success";
+      state.status = "idle";
       state.errorMessage = "";
       state.data = action.payload;
     },
