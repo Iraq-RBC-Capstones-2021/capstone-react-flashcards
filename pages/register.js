@@ -2,14 +2,23 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import lock from "../public/assets/svg/Lock.svg";
 import user from "../public/assets/svg/User.svg";
 import { registerWithEmailAndPassword } from "../store/user/userSlice";
 
 const Signup = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const loggedIn = useSelector((state) => state.user.data);
+
+  useEffect(() => {
+    if (loggedIn) {
+      router.push("/home");
+    }
+  }, [loggedIn, router]);
 
   const {
     register,
@@ -21,11 +30,6 @@ const Signup = () => {
   };
   return (
     <div className="h-70v flex flex-col  items-center justify-center">
-      <Head>
-        <title>Sign Up</title>
-        <meta name="description" content="sign Up page" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <div className=" xl:w-1/3 lg:w-2/5 md:w-3/5 sm:1/2 w-full ">
         <div className="text-center p-16">
           <h1 className="font-medium text-3xl mb-7">Sign Up</h1>

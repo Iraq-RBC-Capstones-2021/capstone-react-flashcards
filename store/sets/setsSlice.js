@@ -13,6 +13,10 @@ const initialState = {
     recent: [],
     cards: [],
     libraryInfoIds: [],
+    profile: {
+      userInfo: null,
+      sets: [],
+    },
   },
   status: "idle",
 };
@@ -186,6 +190,32 @@ export const getLibraryInfoIds = createAsyncThunk(
   }
 );
 
+export const getProfileSets = createAsyncThunk(
+  "sets/getUserProfileSets",
+  async (userId, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const setDocs = await firestore.get({
+      collection: "sets",
+      where: ["userId", "==", userId],
+    });
+
+    let sets = [];
+
+    setDocs.forEach((doc) => {
+      sets.push({ ...doc.data(), setId: doc.id });
+    });
+
+    const user = await firestore.get({ collection: "users", doc: userId });
+
+    return {
+      sets,
+      userInfo: user.data(),
+    };
+  }
+);
+
 const setsSlice = createSlice({
   name: "sets",
   initialState,
@@ -236,7 +266,6 @@ const setsSlice = createSlice({
     [removeSetFromLibrary.rejected]: (state) => {
       state.status = "error";
     },
-
     [getLibraryInfoIds.pending]: (state) => {
       state.status = "loading";
     },
@@ -245,6 +274,16 @@ const setsSlice = createSlice({
       state.data.libraryInfoIds = action.payload;
     },
     [getLibraryInfoIds.rejected]: (state) => {
+      state.status = "error";
+    },
+    [getProfileSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getProfileSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.profile = action.payload;
+    },
+    [getProfileSets.rejected]: (state) => {
       state.status = "error";
     },
   },
