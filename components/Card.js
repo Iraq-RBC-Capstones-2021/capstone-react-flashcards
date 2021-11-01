@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import imagePlaceHolder from "../public/assets/image_place_holder.png";
 import avatarPlaceHolder from "../public/assets/Avatar.png";
+import AddOrRemoveSetButton from "./AddOrRemoveSetButton";
 import Tag from "./Tag";
 
 const tempTags = ["English", "Learning", "English", "English"];
@@ -95,7 +96,7 @@ export default function Card({
                 alt={`${userName} avatar `}
                 width="50"
                 height="50"
-                src={avatar}
+                src={avatar ? avatar : avatarPlaceHolder}
               />
               <Link href={`/users/${userId}`} passHref>
                 <span className="text-xs  md:text-sm cursor-pointer truncate">
@@ -103,9 +104,10 @@ export default function Card({
                 </span>
               </Link>
             </div>
-            <button className="text-xs md:text-base btn-primary">
-              Add To Library
-            </button>
+            <AddOrRemoveSetButton
+              className="text-xs md:text-sm"
+              setId={setId}
+            />
           </div>
         </div>
       </div>

@@ -6,14 +6,24 @@ import user from "../public/assets/svg/User.svg";
 import { useForm } from "react-hook-form";
 // Logo
 import googleLogo from "../public/assets/Google.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   signInWithEmailAndPassword,
   signInWithGoogle,
 } from "../store/user/userSlice";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 
 const Signin = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
+  const loggedIn = useSelector((state) => state.user.data);
+
+  useEffect(() => {
+    if (loggedIn) {
+      router.push("/home");
+    }
+  }, [loggedIn, router]);
 
   const {
     register,
@@ -27,11 +37,6 @@ const Signin = () => {
 
   return (
     <div className="h-70v flex flex-col  items-center justify-center ">
-      <Head>
-        <title>Sign In</title>
-        <meta name="description" content="sign in page" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <div className=" xl:w-1/3 lg:w-2/5 md:w-3/5 sm:1/2 w-full ">
         <div className="text-center p-16 ">
           <h1 className="font-medium text-3xl mb-7">Log in</h1>
@@ -75,8 +80,6 @@ const Signin = () => {
                 placeholder="Password"
                 {...register("password", {
                   required: true,
-                  pattern:
-                    /^(?=.*[\d])(?=.*[!@#$%^&*])(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*]{8,16}$/,
                 })}
               />
               <br />
