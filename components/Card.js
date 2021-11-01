@@ -30,7 +30,7 @@ export default function Card({
       <div>
         <Image
           className="rounded-b-3xl"
-          src={imageUrl}
+          src={imageUrl ? imageUrl : imagePlaceHolder}
           blur="true"
           blurDataURL={imagePlaceHolder}
           alt={`${title}'s cover`}
@@ -95,7 +95,7 @@ export default function Card({
                 alt={`${userName} avatar `}
                 width="50"
                 height="50"
-                src={avatar}
+                src={avatar ? avatar : avatarPlaceHolder}
               />
               <Link href={`/users/${userId}`} passHref>
                 <span className="text-xs  md:text-sm cursor-pointer truncate">

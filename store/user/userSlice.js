@@ -10,8 +10,9 @@ export const registerWithEmailAndPassword = createAsyncThunk(
   "user/registerWithEmailAndPassword",
   async (info, thunkapi) => {
     try {
-      const { getFirebase } = thunkapi.extra;
+      const { getFirebase, getFirestore } = thunkapi.extra;
       const firebase = getFirebase();
+      const firestore = getFirestore();
       const auth = firebase.auth();
 
       await auth.createUserWithEmailAndPassword(info.email, info.password);
@@ -26,10 +27,11 @@ export const registerWithEmailAndPassword = createAsyncThunk(
         displayName: info.name,
         email: info.email,
         photoURL: currentUser.photoURL,
-        uid: currentUser.uid,
       };
 
-      return data;
+      await firestore.set({ collection: "users", doc: currentUser.uid }, data);
+
+      return { ...data, uid: currentUser.uid };
     } catch (e) {
       const { rejectWithValue } = thunkapi;
 
@@ -74,8 +76,9 @@ export const signInWithGoogle = createAsyncThunk(
   "user/signInWithGoogle",
   async (_, thunkapi) => {
     try {
-      const { getFirebase } = thunkapi.extra;
+      const { getFirebase, getFirestore } = thunkapi.extra;
       const firebase = getFirebase();
+      const firestore = getFirestore();
       const auth = firebase.auth();
 
       const provider = new firebase.auth.GoogleAuthProvider();
@@ -89,10 +92,22 @@ export const signInWithGoogle = createAsyncThunk(
         displayName: currentUser.displayName,
         email: currentUser.email,
         photoURL: currentUser.photoURL,
-        uid: currentUser.uid,
       };
 
-      return data;
+      const userFromCollection = await firestore.get({
+        collection: "users",
+        doc: currentUser.uid,
+      });
+
+      // add user data to collection if user is not found in the collection.
+      if (userFromCollection.data() === undefined) {
+        await firestore.set(
+          { collection: "users", doc: currentUser.uid },
+          data
+        );
+      }
+
+      return { ...data, uid: currentUser.uid };
     } catch (e) {
       const { rejectWithValue } = thunkapi;
 
