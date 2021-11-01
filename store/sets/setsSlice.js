@@ -121,6 +121,70 @@ export const createNewCard = createAsyncThunk(
   }
 );
 
+// Recent Sets
+export const getRecentSets = createAsyncThunk(
+  "sets/getRecentSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "sets",
+      orderBy: "createdAt",
+      limit: 6,
+    });
+
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    return sets;
+  }
+);
+// Suggested Sets
+export const getSuggestedSets = createAsyncThunk(
+  "sets/getSuggestedSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "sets",
+      orderBy: ["createdAt", "asc"],
+      limit: 6,
+    });
+
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    sets.sort(() => Math.random() - 0.5);
+    return sets;
+  }
+);
+// Popular Sets
+export const getPopularSets = createAsyncThunk(
+  "sets/getPopularSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "sets",
+      where: ["views", ">=", 0],
+      orderBy: ["views", "desc"],
+      limit: 6,
+    });
+
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    return sets;
+  })
 export const addSetToLibrary = createAsyncThunk(
   "sets/addSetToLibrary",
   async (setId, thunkapi) => {
@@ -239,6 +303,39 @@ const setsSlice = createSlice({
       state.status = "idle";
     },
     [createNewCard.rejected]: (state) => {
+      state.status = "error";
+    },
+    // Recent sets
+    [getRecentSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getRecentSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.recent = action.payload;
+    },
+    [getRecentSets.rejected]: (state) => {
+      state.status = "error";
+    },
+    // Suggested Sets
+    [getSuggestedSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getSuggestedSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.suggested = action.payload;
+    },
+    [getSuggestedSets.rejected]: (state) => {
+      state.status = "error";
+    },
+    // Popular Sets
+    [getPopularSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getPopularSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.popular = action.payload;
+    },
+    [getPopularSets.rejected]: (state) => {
       state.status = "error";
     },
     [addSetToLibrary.pending]: (state) => {
