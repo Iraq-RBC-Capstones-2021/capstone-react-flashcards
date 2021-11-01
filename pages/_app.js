@@ -1,10 +1,23 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Head from "next/head";
+import "swiper/css/bundle";
+
+import { getLibraryInfoIds } from "../store/sets/setsSlice";
 import { wrapper } from "../store";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
-import "swiper/css/bundle";
-import Head from "next/head";
 
 const App = ({ Component, pageProps }) => {
+  const user = useSelector((state) => state.user.data);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getLibraryInfoIds());
+    }
+  }, [user, dispatch]);
+
   return (
     <>
       <Head>

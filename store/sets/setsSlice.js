@@ -12,6 +12,7 @@ const initialState = {
     suggested: [],
     recent: [],
     cards: [],
+    libraryInfoIds: [],
     profile: {
       userInfo: null,
       sets: [],
@@ -120,6 +121,75 @@ export const createNewCard = createAsyncThunk(
   }
 );
 
+export const addSetToLibrary = createAsyncThunk(
+  "sets/addSetToLibrary",
+  async (setId, thunkapi) => {
+    const { getFirestore, getFirebase } = thunkapi.extra;
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    const uid = firebase.auth().currentUser.uid;
+
+    const data = {
+      setId,
+      addedAt: Date.now(),
+    };
+
+    await firestore
+      .collection("library")
+      .doc(uid)
+      .set(
+        {
+          data: firestore.FieldValue.arrayUnion(data),
+        },
+        { merge: true }
+      );
+
+    return data;
+  }
+);
+
+export const removeSetFromLibrary = createAsyncThunk(
+  "sets/removeSetFromLibrary",
+  async (setId, thunkapi) => {
+    const { getFirestore, getFirebase } = thunkapi.extra;
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    const uid = firebase.auth().currentUser.uid;
+    const libraryInfoIds = thunkapi.getState().sets.data.libraryInfoIds;
+
+    const setInfo = libraryInfoIds.find((set) => set.setId === setId);
+
+    await firestore
+      .collection("library")
+      .doc(uid)
+      .set(
+        {
+          data: firestore.FieldValue.arrayRemove(setInfo),
+        },
+        { merge: true }
+      );
+
+    return setInfo;
+  }
+);
+
+export const getLibraryInfoIds = createAsyncThunk(
+  "sets/getLibraryInfoIds",
+  async (_, thunkapi) => {
+    const { getFirestore, getFirebase } = thunkapi.extra;
+    const firestore = getFirestore();
+    const firebase = getFirebase();
+    const uid = firebase.auth().currentUser.uid;
+
+    const doc = await firestore.get({
+      collection: "library",
+      doc: uid,
+    });
+
+    return doc.data().data;
+  }
+);
+
 export const getProfileSets = createAsyncThunk(
   "sets/getUserProfileSets",
   async (userId, thunkapi) => {
@@ -169,6 +239,41 @@ const setsSlice = createSlice({
       state.status = "idle";
     },
     [createNewCard.rejected]: (state) => {
+      state.status = "error";
+    },
+    [addSetToLibrary.pending]: (state) => {
+      state.status = "loading";
+    },
+    [addSetToLibrary.fulfilled]: (state, action) => {
+      state.data.libraryInfoIds.push(action.payload);
+      state.status = "idle";
+    },
+    [addSetToLibrary.rejected]: (state) => {
+      state.status = "error";
+    },
+    [removeSetFromLibrary.pending]: (state) => {
+      state.status = "loading";
+    },
+    [removeSetFromLibrary.fulfilled]: (state, action) => {
+      const newLibrary = state.data.libraryInfoIds.filter(
+        (set) => set.setId !== action.payload.setId
+      );
+
+      state.data.libraryInfoIds = newLibrary;
+
+      state.status = "idle";
+    },
+    [removeSetFromLibrary.rejected]: (state) => {
+      state.status = "error";
+    },
+    [getLibraryInfoIds.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getLibraryInfoIds.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.libraryInfoIds = action.payload;
+    },
+    [getLibraryInfoIds.rejected]: (state) => {
       state.status = "error";
     },
     [getProfileSets.pending]: (state) => {

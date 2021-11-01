@@ -1,3 +1,4 @@
+import AddOrRemoveSetButton from "../components/AddOrRemoveSetButton";
 import CommentList from "../components/CommentList";
 import Section from "../components/Section";
 import SetCarousel from "../components/SetCarousel";
@@ -16,8 +17,6 @@ export default function SetPage() {
       />
     );
   };
-
-  const addToLibrary = () => {};
 
   const deck = [
     {
@@ -87,13 +86,7 @@ export default function SetPage() {
         </ul>
 
         <div className="pr-36 py-10">
-          <button
-            type="button"
-            className="py-2 px-8 btn-primary"
-            onClick={addToLibrary}
-          >
-            Add To Library
-          </button>
+          <AddOrRemoveSetButton className="py-2 px-8 btn-primary text-base" />
         </div>
       </Section>
 
