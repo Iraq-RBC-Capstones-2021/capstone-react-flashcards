@@ -21,6 +21,7 @@ export default function Card({
   description = tempDescription,
   setId,
   userId,
+  inLibrary = false,
 }) {
   return (
     <div
@@ -98,16 +99,24 @@ export default function Card({
                 height="50"
                 src={avatar ? avatar : avatarPlaceHolder}
               />
-              <Link href={`/users/${userId}`} passHref>
+              <Link href={`/profile/${userId}`} passHref>
                 <span className="text-xs  md:text-sm cursor-pointer truncate">
                   {userName}
                 </span>
               </Link>
             </div>
-            <AddOrRemoveSetButton
-              className="text-xs md:text-sm"
-              setId={setId}
-            />
+            {inLibrary ? (
+              <Link href={`/sets/${setId}`} passHref>
+                <button className="btn-primary text-xs md:text-base ">
+                  Study
+                </button>
+              </Link>
+            ) : (
+              <AddOrRemoveSetButton
+                className="text-xs md:text-sm"
+                setId={setId}
+              />
+            )}
           </div>
         </div>
       </div>
