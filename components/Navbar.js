@@ -138,7 +138,7 @@ function Navbar() {
             )}
           </div>
           {userData !== null && (
-            <Link href={`/library/${userData.uid}`}>
+            <Link href={`/library`}>
               <a className="py-1.5 px-2 hover:bg-grey rounded-lg transition duration-300">
                 My library
               </a>
