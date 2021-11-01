@@ -21,24 +21,8 @@ export default function Review() {
   const history = useSelector((state) => state.history.userHistory);
 
   // Get userUID
-
-  //
-  const dispatchUser = useDispatch();
-  useEffect(() => {
-    dispatchUser(
-      signInWithEmailAndPassword({
-        email: "yasser@cards.com",
-        password: "123456@A",
-      })
-    );
-  }, [dispatchUser]);
-
-  //  Yasser@cards.com 123456@A
   const user = useSelector((state) => state.user);
-  let userUID = "";
-  if (user.data != null) {
-    userUID = user.data.uid;
-  }
+  let userUID = user.data.uid;
 
   useEffect(() => {
     dispatch(userHistory({ userUID: userUID, setId: setId }));
@@ -54,64 +38,6 @@ export default function Review() {
       setNewCards(Math.ceil(currentSet.length - learning - toReview));
     }
   }
-
-  // // check if user have history, if not create one.
-  // async function userHistory() {
-  //   const docSnap = await getDoc(doc(db, "history", userUID));
-  //   if (!docSnap.exists()) {
-  //     setDoc(doc(db, "history", userUID), {});
-  //   } else {
-  //     // check to see if user played this set before
-  //     const setShouldBeAt = db.doc(`/history/${userUID}/sets/${setId}`);
-  //     if ((await getDoc(setShouldBeAt)).exists()) {
-  //       setFirstTime(false);
-  //       const sh = await getDoc(setShouldBeAt);
-  //       setHistoryOfSet(sh.data());
-  //     } else {
-  //     }
-  //   }
-  // }
-
-  // // Get correct set name to display and card count to do statistics
-  // async function getSetCardsCount() {
-  //   const q = query(collection(db, "cards"), where("setId", "==", setId));
-  //   const querySnapshot = await getDocs(q);
-  //   setCardCount(querySnapshot.docs.length);
-  // }
-  // async function getSetName() {
-  //   const setSnap = await getDoc(doc(db, "sets", setId));
-  //   setSetName(setSnap.data().title);
-  // }
-
-  // // set statistics
-  // async function statistics() {
-  //   if (firstTime) {
-  //     setNewCards(cardCount);
-  //   } else {
-  //     const hh = Object.values(historyOfSet);
-
-  //     const toReview = hh.filter((el) => !el.guess);
-  //     setToReview(toReview.length);
-
-  //     const learning = hh.filter((el) => el.guess);
-  //     setLearning(learning.length);
-
-  //     const nn = cardCount - learning.length - toReview.length;
-  //     setNewCards(nn);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   if (setId != undefined) {
-  //     userHistory();
-  //     getSetCardsCount();
-  //     getSetName();
-  //   }
-  // }, [router.query, userUID]);
-
-  // useEffect(() => {
-  //   statistics();
-  // }, [cardCount, historyOfSet, userUID]);
 
   return (
     <div className="flex justify-center my-10">
