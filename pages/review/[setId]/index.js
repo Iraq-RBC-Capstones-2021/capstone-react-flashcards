@@ -31,7 +31,7 @@ export default function Review() {
         password: "123456@A",
       })
     );
-  }, []);
+  }, [dispatchUser]);
 
   //  Yasser@cards.com 123456@A
   const user = useSelector((state) => state.user);
@@ -54,10 +54,6 @@ export default function Review() {
       setNewCards(Math.ceil(currentSet.length - learning - toReview));
     }
   }
-
-  useEffect(() => {
-    setProgress();
-  }, []);
 
   // // check if user have history, if not create one.
   // async function userHistory() {
@@ -128,7 +124,7 @@ export default function Review() {
               width="18"
               height="18"
             />
-            {setName}:
+            {"Set Progress"}:
           </div>
           <Image src="/assets/svg/Settings.svg" alt="" width="18" height="18" />
         </div>
