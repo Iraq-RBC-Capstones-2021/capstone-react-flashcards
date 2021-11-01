@@ -11,8 +11,12 @@ const Library = () => {
   const userInfo = useSelector((state) => state.user.data);
 
   useEffect(() => {
-    dispatch(getMineSets(userInfo.uid));
-  }, [dispatch, userInfo.uid]);
+    if (userInfo) {
+      dispatch(getMineSets(userInfo.uid));
+    }
+  }, [dispatch, userInfo]);
+
+  if (!userInfo) return <h2>Loading...</h2>;
 
   return (
     <div>
