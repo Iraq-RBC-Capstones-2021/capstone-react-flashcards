@@ -22,7 +22,7 @@ export default function Review() {
 
   // Get userUID
   const user = useSelector((state) => state.user);
-  let userUID = user.data.uid;
+  let userUID = "4IuX8X4Rj9fg1fGyHq9DujOSoKq1";
 
   useEffect(() => {
     dispatch(userHistory({ userUID: userUID, setId: setId }));
