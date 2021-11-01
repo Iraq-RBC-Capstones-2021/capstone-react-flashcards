@@ -1,7 +1,19 @@
-import Card from "../../../components/Card";
-import { ScoreProgress } from "../../../components/ScoreProgress";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 
-const Library = ({ sets }) => {
+import Card from "../components/Card";
+import { ScoreProgress } from "../components/ScoreProgress";
+import { getMineSets } from "../store/sets/setsSlice";
+
+const Library = () => {
+  const dispatch = useDispatch();
+  const mineSets = useSelector((state) => state.sets.data.mine);
+  const userInfo = useSelector((state) => state.user.data);
+
+  useEffect(() => {
+    dispatch(getMineSets(userInfo.uid));
+  }, [dispatch, userInfo.uid]);
+
   return (
     <div>
       <div className="flex flex-col my-20">
@@ -14,31 +26,18 @@ const Library = ({ sets }) => {
         </div>
       </div>
       <div>
-        <h1 className="font-bold text-xl"> &#62; Users’s sets</h1>
+        <h1 className="font-bold text-xl">
+          {" "}
+          &#62; {userInfo.displayName}’s sets
+        </h1>
         <div className="grid justify-items-center items-center gap-x-20 xl:mx-12  xl:grid-cols-3 lg:grid-cols-2 lg:mx-28  md:grid-cols-1 sm:grid-cols-2">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {mineSets.map((set) => (
+            <Card key={set.setId} {...set} inLibrary />
+          ))}
         </div>
       </div>
     </div>
   );
-};
-export const getServerSideProps = async (context) => {
-  const res = await fetch(
-    //this is just for testing
-    `http://jsonplaceholder.typicode.com/posts/${context.query.id}`
-  );
-  const sets = await res.json();
-
-  return {
-    props: {
-      sets,
-    },
-  };
 };
 
 export default Library;
