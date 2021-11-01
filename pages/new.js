@@ -5,7 +5,11 @@ import CardEditors from "../components/CardEditors";
 import NewSetForm from "../components/NewSetForm";
 import SetSelect from "../components/SetSelect";
 import Attachments from "../components/Attachments";
-import { createNewSet, createNewCard } from "../store/sets/setsSlice";
+import {
+  createNewSet,
+  createNewCard,
+  getTotalSets,
+} from "../store/sets/setsSlice";
 
 export default function CreateCard() {
   const dispatch = useDispatch();
@@ -197,6 +201,10 @@ export default function CreateCard() {
       setCurrentSet(null);
     }
   }, [searchValueSet]);
+
+  useEffect(() => {
+    dispatch(getTotalSets());
+  }, [dispatch, sets]);
 
   if (pageStatus === "loading") return <h1>Loading....</h1>;
 
