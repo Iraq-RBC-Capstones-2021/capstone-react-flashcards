@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 import CardEditors from "../components/CardEditors";
 import NewSetForm from "../components/NewSetForm";
@@ -13,8 +14,11 @@ import {
 
 export default function CreateCard() {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const sets = useSelector((state) => state.sets.data.mine);
+
+  const userInfo = useSelector((state) => state.user.data);
 
   const pageStatus = useSelector((state) => state.sets.status);
 
@@ -205,6 +209,12 @@ export default function CreateCard() {
   useEffect(() => {
     dispatch(getTotalSets());
   }, [dispatch, sets]);
+
+  useEffect(() => {
+    if (!userInfo) {
+      router.push("/signin");
+    }
+  }, [userInfo, router]);
 
   if (pageStatus === "loading") return <h1>Loading....</h1>;
 
