@@ -52,12 +52,8 @@ export const signInWithEmailAndPassword = createAsyncThunk(
 
       const currentUser = auth.currentUser;
 
-      await currentUser.updateProfile({
-        displayName: info.name,
-      });
-
       const data = {
-        displayName: info.name,
+        displayName: currentUser.displayName,
         email: info.email,
         photoURL: currentUser.photoURL,
         uid: currentUser.uid,

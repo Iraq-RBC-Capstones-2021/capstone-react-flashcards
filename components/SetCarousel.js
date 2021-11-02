@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import CarouselCard from "./CarouselCard";
 import useCarouselEditor from "../hooks/useCarouselEditor";
 

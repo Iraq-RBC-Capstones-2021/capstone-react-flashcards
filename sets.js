@@ -205,14 +205,17 @@ const data = {
   ],
   top_categories: [
     {
+      id: "1",
       name: "Math",
       categories: ["Algebra", "Arithmetic", "Geometry"],
     },
     {
+      id: "2",
       name: "Programming",
       categories: ["React", "Java", "Node"],
     },
     {
+      id: "3",
       name: "Language",
       categories: ["Japanse", "English", "Italin"],
     },

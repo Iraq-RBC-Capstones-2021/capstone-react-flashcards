@@ -4,24 +4,44 @@ import Category from "../components/Category";
 import Card from "../components/Card";
 import data from "../sets.js";
 import { SwiperSlide } from "swiper/react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getRecentSets,
+  getSuggestedSets,
+  getPopularSets,
+} from "../store/sets/setsSlice";
 
 export default function Home() {
-  const popularSets = data.Popular;
-  const latestSets = data.Latest;
-  const suggestedSets = data.Suggested;
+  const recentSets = useSelector((state) => state.sets.data.recent);
+  const suggestedSets = useSelector((state) => state.sets.data.suggested);
+  const popularSets = useSelector((state) => state.sets.data.popular);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getRecentSets());
+    dispatch(getSuggestedSets());
+    dispatch(getPopularSets());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // const popularSets = data.Popular;
+  // const latestSets = data.Latest;
+  // const suggestedSets = data.Suggested;
   const topCategories = data.top_categories;
 
   const allSets = (set) => {
     return (
       <SwiperSlide key={set.id}>
         <Card
-          key={set.id}
+          key={set.userId}
           userName={set.userName}
           description={set.description}
           title={set.title}
           cardCount={set.cardCount}
-          imageUrl={set.imageUrl}
-          avatar={set.avatar}
+          //   imageUrl={set.imageUrl}
+          //   avatar={set.avatar}
           tags={set.tags}
           setId={set.setId}
           userId={set.userId}
@@ -32,7 +52,7 @@ export default function Home() {
   };
 
   const allTopCategories = (cat) => {
-    return <Category name={cat.name} categories={cat.categories} />;
+    return <Category name={cat.name} categories={cat.categories} id={cat.id} />;
   };
 
   return (
@@ -48,7 +68,7 @@ export default function Home() {
           <i className="fas fa-chevron-right fa-sm mr-4"></i>
           Latest
         </p>
-        <Carsouel>{latestSets.map(allSets)}</Carsouel>
+        <Carsouel>{recentSets.map(allSets)}</Carsouel>
 
         <p className="font-medium text-2xl mt-12">
           <i className="fas fa-chevron-right fa-sm mr-4"></i>

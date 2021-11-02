@@ -1,18 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-const tempMineSets = [
-  { setId: "8d2DhGMvepnuX1X0YeSE", title: "VLAN" },
-  { setId: "M4GvLlfPz0ooNsgYsv4R", title: "IP Address" },
-];
-
 const initialState = {
   data: {
-    mine: [...tempMineSets],
+    mine: [],
     popular: [],
     suggested: [],
     recent: [],
     cards: [],
     libraryInfoIds: [],
+    total: [],
     profile: {
       userInfo: null,
       sets: [],
@@ -121,6 +117,71 @@ export const createNewCard = createAsyncThunk(
   }
 );
 
+// Recent Sets
+export const getRecentSets = createAsyncThunk(
+  "sets/getRecentSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "sets",
+      orderBy: "createdAt",
+      limit: 6,
+    });
+
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    return sets;
+  }
+);
+// Suggested Sets
+export const getSuggestedSets = createAsyncThunk(
+  "sets/getSuggestedSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "sets",
+      orderBy: ["createdAt", "asc"],
+      limit: 6,
+    });
+
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    sets.sort(() => Math.random() - 0.5);
+    return sets;
+  }
+);
+// Popular Sets
+export const getPopularSets = createAsyncThunk(
+  "sets/getPopularSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "sets",
+      where: ["views", ">=", 0],
+      orderBy: ["views", "desc"],
+      limit: 6,
+    });
+
+    const sets = [];
+    collection.forEach((doc) => {
+      const data = doc.data();
+      sets.push({ ...data, setId: doc.id });
+    });
+    return sets;
+  })
+
 export const addSetToLibrary = createAsyncThunk(
   "sets/addSetToLibrary",
   async (setId, thunkapi) => {
@@ -216,10 +277,44 @@ export const getProfileSets = createAsyncThunk(
   }
 );
 
+export const getTotalSets = createAsyncThunk(
+  "sets/getTotalSets",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({ collection: "sets" });
+
+    let sets = [];
+
+    collection.forEach((doc) => {
+      sets.push({ ...doc.data(), setId: doc.id });
+    });
+
+    return sets;
+  }
+);
+
 const setsSlice = createSlice({
   name: "sets",
   initialState,
-  reducers: {},
+  reducers: {
+    getMineSets(state, action) {
+      const totalSets = state.data.total;
+      const libraryInfoIds = state.data.libraryInfoIds;
+      const userId = action.payload;
+
+      const library = totalSets.filter((set) =>
+        libraryInfoIds.some((librarySet) => librarySet.setId === set.setId)
+      );
+
+      const setsCreatedByUser = totalSets.filter(
+        (set) => set.userId === userId
+      );
+
+      state.data.mine = [...library, ...setsCreatedByUser];
+    },
+  },
   extraReducers: {
     [createNewSet.pending]: (state) => {
       state.status = "loading";
@@ -241,6 +336,40 @@ const setsSlice = createSlice({
     [createNewCard.rejected]: (state) => {
       state.status = "error";
     },
+    // Recent sets
+    [getRecentSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getRecentSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.recent = action.payload;
+    },
+    [getRecentSets.rejected]: (state) => {
+      state.status = "error";
+    },
+    // Suggested Sets
+    [getSuggestedSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getSuggestedSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.suggested = action.payload;
+    },
+    [getSuggestedSets.rejected]: (state) => {
+      state.status = "error";
+    },
+    // Popular Sets
+    [getPopularSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getPopularSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.popular = action.payload;
+    },
+    [getPopularSets.rejected]: (state) => {
+      state.status = "error";
+    },
+
     [addSetToLibrary.pending]: (state) => {
       state.status = "loading";
     },
@@ -286,9 +415,19 @@ const setsSlice = createSlice({
     [getProfileSets.rejected]: (state) => {
       state.status = "error";
     },
+    [getTotalSets.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getTotalSets.fulfilled]: (state, action) => {
+      state.status = "idle";
+      state.data.total = action.payload;
+    },
+    [getTotalSets.rejected]: (state) => {
+      state.status = "error";
+    },
   },
 });
 
-export const {} = setsSlice.actions;
+export const { getMineSets } = setsSlice.actions;
 
 export default setsSlice;
