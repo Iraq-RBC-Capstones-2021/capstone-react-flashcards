@@ -1,11 +1,31 @@
-import AddOrRemoveSetButton from "../components/AddOrRemoveSetButton";
-import CommentList from "../components/CommentList";
-import Section from "../components/Section";
-import SetCarousel from "../components/SetCarousel";
-import data from "../users.json";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/router";
 import Head from "next/head";
 
+import AddOrRemoveSetButton from "../../components/AddOrRemoveSetButton";
+import CommentList from "../../components/CommentList";
+import Section from "../../components/Section";
+import SetCarousel from "../../components/SetCarousel";
+import data from "../../users.json";
+import { getSetDetails } from "../../store/sets/setsSlice";
+
 export default function SetPage() {
+  const router = useRouter();
+  const { setId } = router.query;
+
+  const dispatch = useDispatch();
+  const setDetails = useSelector((state) => state.sets.data.setDetails);
+  const pageStatus = useSelector((state) => state.sets.status);
+
+  useEffect(() => {
+    if (setId) {
+      dispatch(getSetDetails(setId));
+    }
+  }, [setId, dispatch]);
+
+  if (pageStatus === "loading" || !setId) return <h1>Loading...</h1>;
+
   const allUsers = data.users;
   const all = (user) => {
     return (
@@ -18,40 +38,6 @@ export default function SetPage() {
     );
   };
 
-  const deck = [
-    {
-      front: {
-        title: "flashcard 1",
-        content: "some text1",
-        images: [
-          "https://cdn.pixabay.com/photo/2018/10/13/08/39/hohenschwangau-3743780_960_720.jpg",
-        ],
-      },
-      back: {
-        title: "flashcardss 1",
-        content: "some text11",
-        images: [
-          "https://cdn.pixabay.com/photo/2020/12/23/14/01/river-5855081_960_720.jpg",
-        ],
-      },
-    },
-    {
-      front: {
-        title: "flashcard 2",
-        content: "some text2",
-        images: [
-          "https://cdn.pixabay.com/photo/2021/10/10/10/45/fog-6696312_960_720.jpg",
-        ],
-      },
-      back: {
-        title: "flashcardss 2",
-        content: "some text22",
-        images: [
-          "https://cdn.pixabay.com/photo/2018/10/13/08/39/hohenschwangau-3743780_960_720.jpg",
-        ],
-      },
-    },
-  ];
   return (
     <div className="sm:px-4 md:px-4 lg:px-32">
       <Head>
@@ -60,11 +46,10 @@ export default function SetPage() {
           href="https://use.fontawesome.com/releases/v5.11.2/css/all.css"
         />
       </Head>
-
       <Section
-        title="2k Most Common English Words"
-        desc="Study the most popluar english words that we can think of with this amazing cards set."
-        image="/assets/placeholder_img.png"
+        title={setDetails.set.title}
+        desc={setDetails.set.description}
+        image={setDetails.set.imageUrl}
       >
         <ul className="flex cursor-pointer">
           <li>
@@ -86,18 +71,21 @@ export default function SetPage() {
         </ul>
 
         <div className="pr-36 py-10">
-          <AddOrRemoveSetButton className="py-2 px-8 btn-primary text-base" />
+          <AddOrRemoveSetButton
+            className="py-2 px-8 btn-primary text-base"
+            setId={setId}
+          />
         </div>
       </Section>
-
-      {/* Start Carousel */}
-      <p className="font-medium text-2xl lg:pl-52 py-14">
-        <i className="fas fa-chevron-right fa-sm mr-4"></i>
-        Set Content
-      </p>
-      <SetCarousel set={deck} />
-      {/* End Carousel */}
-
+      {setDetails.cards.length > 0 ? (
+        <>
+          <p className="font-medium text-2xl lg:pl-52 py-14">
+            <i className="fas fa-chevron-right fa-sm mr-4"></i>
+            Set Content
+          </p>
+          <SetCarousel set={setDetails.cards} />
+        </>
+      ) : null}
       <div className="p-5 mt-12 bg-gray-100 rounded-3xl">
         <p className="font-medium text-2xl lg:pl-52 py-14">
           <i className="fas fa-chevron-right fa-sm mr-4"></i>
@@ -114,7 +102,6 @@ export default function SetPage() {
           </button>
         </div>
       </div>
-
       <form className="sm:px-4 md:px-4 lg:px-24 text-gray py-32">
         <div className="mb-3">
           <small className="text-gray">Leave a comment:</small>
