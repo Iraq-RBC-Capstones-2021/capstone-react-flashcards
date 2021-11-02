@@ -104,19 +104,6 @@ export const recordIncorrect = createAsyncThunk(
   }
 );
 
-export const totalProgress = createAsyncThunk(
-  "history/totalProgress",
-  async (info) => {
-    try {
-      const ss = thunkapi.getState().history.userHistory;
-
-      return ss.length;
-    } catch (error) {
-      return error;
-    }
-  }
-);
-
 const historySlice = createSlice({
   name: "history",
   initialState: initialState,
@@ -162,15 +149,6 @@ const historySlice = createSlice({
       state.status = "idle";
     },
     [recordIncorrect.rejected]: (state) => {
-      state.status = "error";
-    },
-    [totalProgress.pending]: (state) => {
-      state.status = "loading";
-    },
-    [totalProgress.fulfilled]: (state, action) => {
-      state.status = "idle";
-    },
-    [totalProgress.rejected]: (state) => {
       state.status = "error";
     },
   },

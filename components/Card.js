@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import imagePlaceHolder from "../public/assets/image_place_holder.png";
 import avatarPlaceHolder from "../public/assets/Avatar.png";
+import AddOrRemoveSetButton from "./AddOrRemoveSetButton";
 import Tag from "./Tag";
 
 const tempTags = ["English", "Learning", "English", "English"];
@@ -103,9 +104,10 @@ export default function Card({
                 </span>
               </Link>
             </div>
-            <button className="text-xs md:text-base btn-primary">
-              Add To Library
-            </button>
+            <AddOrRemoveSetButton
+              className="text-xs md:text-sm"
+              setId={setId}
+            />
           </div>
         </div>
       </div>

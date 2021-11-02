@@ -1,19 +1,18 @@
+import { useState, useEffect } from "react";
+
 import CarouselCard from "./CarouselCard";
-import FlashCard from "./FlashCard";
-import { useEffect, useState } from "react";
+import useCarouselEditor from "../hooks/useCarouselEditor";
 
 function SetCarousel({
   set = [
     {
       front: {
-        title: "",
-        content: "",
+        text: "",
         images: [],
         audios: [],
       },
       back: {
-        title: "",
-        content: "",
+        text: "",
         images: [],
         audios: [],
       },
@@ -22,20 +21,32 @@ function SetCarousel({
   getCurrentCard,
 }) {
   const [flag, setFlag] = useState(0);
-  const [flip, setFlip] = useState(false);
+  const [flip, setFlip] = useState(true);
+
   const flashcard = set[flag];
+
+  const frontEditor = useCarouselEditor(flashcard.front.text);
+  const backEditor = useCarouselEditor(flashcard.back.text);
+
+  const toggleFlip = () => {
+    setFlip(!flip);
+  };
 
   const handlePrevious = () => {
     if (flag > 0) {
-      setFlag(flag - 1);
       setFlip(true);
+      frontEditor.commands.setContent(set[flag - 1].front.text);
+      backEditor.commands.setContent(set[flag - 1].back.text);
+      setFlag(flag - 1);
     }
   };
 
   const handleNext = () => {
     if (flag < set.length - 1) {
-      setFlag(flag + 1);
       setFlip(true);
+      frontEditor.commands.setContent(set[flag + 1].front.text);
+      backEditor.commands.setContent(set[flag + 1].back.text);
+      setFlag(flag + 1);
     }
   };
 
@@ -67,7 +78,20 @@ function SetCarousel({
           </button>
 
           {/* card */}
-          <FlashCard front={flashcard.front} back={flashcard.back} />
+          <div className="cardContainer w-full h-96" onClick={toggleFlip}>
+            <div className={`front ${flip ? "front-flip" : ""} `}>
+              <CarouselCard
+                flashcard={flashcard.front}
+                carouselEditor={frontEditor}
+              />
+            </div>
+            <div className={`back ${flip ? "back-flip" : ""}`}>
+              <CarouselCard
+                flashcard={flashcard.back}
+                carouselEditor={backEditor}
+              />
+            </div>
+          </div>
 
           {/* next-card button */}
           <button className="p-4 w-20 h-20 self-center" onClick={handleNext}>
@@ -97,4 +121,5 @@ function SetCarousel({
     </>
   );
 }
+
 export default SetCarousel;

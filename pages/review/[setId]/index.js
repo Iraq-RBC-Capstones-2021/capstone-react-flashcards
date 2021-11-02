@@ -11,8 +11,6 @@ export default function Review() {
   const [learning, setLearning] = useState(0);
   const [newCards, setNewCards] = useState(0);
 
-  const [setName, setSetName] = useState("Set Name");
-
   const router = useRouter();
   const { setId } = router.query;
 
@@ -21,22 +19,27 @@ export default function Review() {
   const history = useSelector((state) => state.history.userHistory);
 
   // Get userUID
+  const [userUID, setUserUID] = useState("4IuX8X4Rj9fg1fGyHq9DujOSoKq1");
   const user = useSelector((state) => state.user);
-  let userUID = "4IuX8X4Rj9fg1fGyHq9DujOSoKq1";
+
+  useEffect(() => {
+    if (user.data != null) {
+      setUserUID(user.data.uid);
+    }
+  }, [user.data]);
 
   useEffect(() => {
     dispatch(userHistory({ userUID: userUID, setId: setId }));
   }, [dispatch, userUID, setId]);
   useEffect(() => {
     dispatch(currentSet({ setId: setId }));
+    setProgress();
   }, [dispatch, setId]);
 
   function setProgress() {
-    if (currentSet.length > 0) {
-      setToReview(Math.ceil(currentSet.length / 3));
-      setLearning(Math.ceil(currentSet.length / 3));
-      setNewCards(Math.ceil(currentSet.length - learning - toReview));
-    }
+    setToReview(51);
+    setLearning(24);
+    setNewCards(31);
   }
 
   return (
