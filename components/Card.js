@@ -106,7 +106,7 @@ export default function Card({
               </Link>
             </div>
             {inLibrary ? (
-              <Link href={`/sets/${setId}`} passHref>
+              <Link href={`/review/${setId}`} passHref>
                 <button className="btn-primary text-xs md:text-base ">
                   Study
                 </button>

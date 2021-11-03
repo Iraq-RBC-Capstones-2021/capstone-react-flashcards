@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import ScoreProgress from "../../../components/ScoreProgress";
+import { ScoreProgress } from "../../../components/ScoreProgress";
 import { useRouter } from "next/dist/client/router";
 import { useSelector, useDispatch } from "react-redux";
 import { signInWithEmailAndPassword } from "../../../store/user/userSlice";
