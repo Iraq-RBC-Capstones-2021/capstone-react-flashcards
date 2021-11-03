@@ -131,7 +131,19 @@ export const signOut = createAsyncThunk("user/signOut", async (thunkapi) => {
 const userSlice = createSlice({
   initialState,
   name: "user",
-  reducers: {},
+  reducers: {
+    checkCurrentUser: (state, action) => {
+      const user = action.payload;
+      if (user) {
+        state.data = {
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          uid: user.uid,
+          email: user.email,
+        };
+      }
+    },
+  },
   extraReducers: {
     [registerWithEmailAndPassword.pending]: (state) => {
       state.status = "loading";
@@ -187,6 +199,6 @@ const userSlice = createSlice({
   },
 });
 
-export const {} = userSlice.actions;
+export const { checkCurrentUser } = userSlice.actions;
 
 export default userSlice;

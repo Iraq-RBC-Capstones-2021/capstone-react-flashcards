@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Head from "next/head";
 import "swiper/css/bundle";
 
+import { auth } from "../firebase";
+import { checkCurrentUser } from "../store/user/userSlice";
 import { getLibraryInfoIds, getTotalSets } from "../store/sets/setsSlice";
 import { wrapper } from "../store";
 import Layout from "../components/Layout";
@@ -20,6 +22,15 @@ const App = ({ Component, pageProps }) => {
 
   useEffect(() => {
     dispatch(getTotalSets());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const sub = auth.onAuthStateChanged((currentUser) => {
+      if (currentUser) {
+        dispatch(checkCurrentUser(currentUser));
+      }
+    });
+    return sub;
   }, [dispatch]);
 
   return (
