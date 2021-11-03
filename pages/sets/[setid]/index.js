@@ -86,66 +86,6 @@ export const SetPreview = ({ setPreview }) => {
         <div className="flex justify-center ">
           <button className="btn-primary font-200 my-6 w-28">Study</button>
         </div>
-        <div className="flex justify-center h-96 w-full ">
-          <Swiper
-            id="swiper-color"
-            className="flex justify-center relative"
-            effect={"coverflow"}
-            loop={true}
-            autoplay={{
-              delay: 1800,
-              disableOnInteraction: false,
-            }}
-            navigation
-            slidesPerView={1}
-            spaceBetween={10}
-            modules={[Autoplay, Navigation, Pagination]}
-          >
-            {/*
-  data.map(image=>{
-    return 
-    <SwiperSlide className="text-center">
-              <Image
-                src={image}
-                alt="photo"
-                className="object-cover"
-                height={400}
-                width={800}
-              />
-            </SwiperSlide>
-  })
-
-*/}
-
-            <SwiperSlide className="text-center">
-              <Image
-                src={one}
-                alt="photo"
-                className="object-cover"
-                height={400}
-                width={800}
-              />
-            </SwiperSlide>
-            <SwiperSlide className="text-center">
-              <Image
-                src={one}
-                alt="photo"
-                className="object-cover"
-                height={400}
-                width={800}
-              />
-            </SwiperSlide>
-            <SwiperSlide className="text-center">
-              <Image
-                src={one}
-                alt="photo"
-                className="object-cover"
-                height={400}
-                width={800}
-              />
-            </SwiperSlide>
-          </Swiper>
-        </div>
       </div>
     </div>
   );

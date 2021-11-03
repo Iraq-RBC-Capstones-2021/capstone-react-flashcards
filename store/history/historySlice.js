@@ -55,10 +55,12 @@ export const currentSet = createAsyncThunk(
         where("setId", "==", info.setId)
       );
       const querySnapshot = await getDocs(q);
+      const setDocRef = doc(db, "sets", info.setId);
+      const setDoc = await getDoc(setDocRef);
       const setCards = {
         cardsIds: [],
         cardsData: [],
-        setName: "",
+        setName: setDoc.data().title,
       };
       querySnapshot.forEach((doc) => {
         setCards.cardsIds.push(doc.id);

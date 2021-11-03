@@ -1,76 +1,99 @@
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import { ScoreProgress } from "../../../components/ScoreProgress";
-import { useRouter } from "next/dist/client/router";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { signInWithEmailAndPassword } from "../../../store/user/userSlice";
-import { currentSet, userHistory } from "../../../store/history/historySlice";
+import { useRouter } from "next/dist/client/router";
+import Image from "next/image";
+import { Fragment } from "react";
+
+import { ScoreProgress } from "../../../components/ScoreProgress";
+import { Menu, Transition } from "@headlessui/react";
+import { currentSet } from "../../../store/history/historySlice";
+import setting from "../../../public/assets/svg/Settings.svg";
 
 export default function Review() {
-  const [toReview, setToReview] = useState(0);
-  const [learning, setLearning] = useState(0);
-  const [newCards, setNewCards] = useState(0);
-
   const router = useRouter();
   const { setId } = router.query;
 
   const dispatch = useDispatch();
 
-  const history = useSelector((state) => state.history.userHistory);
+  const setName = useSelector((state) => state.history.currentSet.setName);
 
-  // Get userUID
-  const [userUID, setUserUID] = useState("4IuX8X4Rj9fg1fGyHq9DujOSoKq1");
-  const user = useSelector((state) => state.user);
-
-  useEffect(() => {
-    if (user.data != null) {
-      setUserUID(user.data.uid);
-    }
-  }, [user.data]);
-
-  useEffect(() => {
-    dispatch(userHistory({ userUID: userUID, setId: setId }));
-  }, [dispatch, userUID, setId]);
   useEffect(() => {
     dispatch(currentSet({ setId: setId }));
-    setProgress();
   }, [dispatch, setId]);
 
-  function setProgress() {
-    setToReview(51);
-    setLearning(24);
-    setNewCards(31);
-  }
-
   return (
-    <div className="flex justify-center my-10">
-      <div className=" lg:max-w-lg flex flex-col  ">
-        <div className="flex justify-between mt-10">
+    <div className="flex flex-col my-20">
+      <div className="flex justify-around">
+        <h1 className="font-bold text-2xl justify-self-start">
+          {" "}
+          &#62; {setName || "Set's Name"}
+        </h1>
+        <Menu as="div" className="relative inline-block text-left">
           <div>
-            <Image
-              src="/assets/svg/ic_chevron_right.svg"
-              alt=""
-              width="18"
-              height="18"
-            />
-            {"Set Progress"}:
+            <Menu.Button>
+              <span>
+                <Image src={setting} alt="user icon" height={28} width={28} />
+              </span>
+            </Menu.Button>
           </div>
-          <Image src="/assets/svg/Settings.svg" alt="" width="18" height="18" />
-        </div>
-        <div className="flex justify-center mt-10 ">
-          <ScoreProgress number={toReview} title="To Review" color="#52C41A" />
-          <ScoreProgress number={learning} title="Learning" />
-          <ScoreProgress number={newCards} title="New" color="#1890FF" />
-        </div>
-        <div className=" flex justify-center mt-10">
-          <button
-            className="btn-primary"
-            onClick={() => router.push(`./${setId}/study`)}
+          <Transition
+            as={Fragment}
+            enter="transition ease-out duration-100"
+            enterFrom="transform opacity-0 scale-95"
+            enterTo="transform opacity-100 scale-100"
+            leave="transition ease-in duration-75"
+            leaveFrom="transform opacity-100 scale-100"
+            leaveTo="transform opacity-0 scale-95"
           >
-            {" "}
-            Study
-          </button>
-        </div>
+            <Menu.Items
+              className="absolute left-0 w-48 mt-2 origin-top-right bg-white 
+              divide-y divide-gray-100 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            >
+              <div className="px-1 py-1 ">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-violet-500 text-primary" : "text-gray-900"
+                      } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    >
+                      Edit
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+
+              <div className="px-1 py-1">
+                <Menu.Item>
+                  {({ active }) => (
+                    <button
+                      className={`${
+                        active ? "bg-violet-500 text-primary" : "text-gray-900"
+                      } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Transition>
+        </Menu>
+      </div>
+
+      <div className="flex flex-wrap  justify-center mt-14">
+        {/* the progress bar have these props (title,number,color,trailColor) */}
+        <ScoreProgress title="To Review" number="0" color="#52C41A" />
+        <ScoreProgress title="Learning" number="0" />
+        <ScoreProgress title="New" number="3" color="#1890FF" />
+      </div>
+      <div className="flex justify-center ">
+        <button
+          className="btn-primary font-200 my-6 w-28"
+          onClick={() => router.push(`./${setId}/study`)}
+        >
+          Study
+        </button>
       </div>
     </div>
   );
