@@ -7,6 +7,7 @@ import {
   getLibraryInfoIds,
   getTotalSets,
   getMineSets,
+  getCards,
 } from "../store/sets/setsSlice";
 import { wrapper } from "../store";
 import Layout from "../components/Layout";
@@ -25,6 +26,7 @@ const App = ({ Component, pageProps }) => {
 
   useEffect(() => {
     dispatch(getTotalSets());
+    dispatch(getCards());
   }, [dispatch]);
 
   useEffect(() => {

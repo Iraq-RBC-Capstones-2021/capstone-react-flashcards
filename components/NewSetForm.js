@@ -5,7 +5,20 @@ import * as yup from "yup";
 
 import CategoriesSelect from "./CategoriesSelect";
 
-const categories = ["English", "Math", "Biology"];
+const categories = [
+  "Algebra",
+  "Math",
+  "Arithmetic",
+  "Geometry",
+  "Programming",
+  "React",
+  "Java",
+  "Node",
+  "Language",
+  "Japanese",
+  "English",
+  "Italin",
+];
 
 const schema = yup.object().shape({
   title: yup.string().required(),
