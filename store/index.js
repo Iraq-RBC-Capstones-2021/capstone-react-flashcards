@@ -7,6 +7,7 @@ import fb from "../firebase";
 import counterSlice from "./counter/counterSlice";
 import userSlice from "./user/userSlice";
 import setsSlice from "./sets/setsSlice";
+import historySlice from "./history/historySlice";
 
 const makeStore = () =>
   configureStore({
@@ -14,6 +15,7 @@ const makeStore = () =>
       [counterSlice.name]: counterSlice.reducer,
       [userSlice.name]: userSlice.reducer,
       [setsSlice.name]: setsSlice.reducer,
+      [historySlice.name]: historySlice.reducer,
     },
     devTools: true,
     middleware: (getDefaultMiddleware) =>

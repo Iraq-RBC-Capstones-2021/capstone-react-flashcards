@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import CarouselCard from "./CarouselCard";
 import useCarouselEditor from "../hooks/useCarouselEditor";
 
@@ -18,6 +17,7 @@ function SetCarousel({
       },
     },
   ],
+  getCurrentCard = () => {},
 }) {
   const [flag, setFlag] = useState(0);
   const [flip, setFlip] = useState(true);
@@ -48,6 +48,10 @@ function SetCarousel({
       setFlag(flag + 1);
     }
   };
+
+  useEffect(() => {
+    getCurrentCard(flag);
+  }, [flag, getCurrentCard]);
 
   return (
     <>

@@ -406,6 +406,7 @@ const setsSlice = createSlice({
     [getPopularSets.rejected]: (state) => {
       state.status = "error";
     },
+
     [addSetToLibrary.pending]: (state) => {
       state.status = "loading";
     },
