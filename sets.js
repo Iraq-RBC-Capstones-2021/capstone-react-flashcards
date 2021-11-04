@@ -217,7 +217,7 @@ const data = {
     {
       id: "3",
       name: "Language",
-      categories: ["Japanse", "English", "Italin"],
+      categories: ["Japanese", "English", "Italin"],
     },
   ],
 };

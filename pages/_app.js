@@ -5,13 +5,19 @@ import "swiper/css/bundle";
 
 import { auth } from "../firebase";
 import { checkCurrentUser } from "../store/user/userSlice";
-import { getLibraryInfoIds, getTotalSets } from "../store/sets/setsSlice";
+import {
+  getLibraryInfoIds,
+  getTotalSets,
+  getMineSets,
+  getCards,
+} from "../store/sets/setsSlice";
 import { wrapper } from "../store";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
 
 const App = ({ Component, pageProps }) => {
   const user = useSelector((state) => state.user.data);
+  const libraryInfoIds = useSelector((state) => state.sets.data.libraryInfoIds);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,6 +28,7 @@ const App = ({ Component, pageProps }) => {
 
   useEffect(() => {
     dispatch(getTotalSets());
+    dispatch(getCards());
   }, [dispatch]);
 
   useEffect(() => {
@@ -32,6 +39,12 @@ const App = ({ Component, pageProps }) => {
     });
     return sub;
   }, [dispatch]);
+
+  useEffect(() => {
+    if (libraryInfoIds.length > 0 && user) {
+      dispatch(getMineSets(user.uid));
+    }
+  }, [libraryInfoIds, dispatch, user]);
 
   return (
     <>
