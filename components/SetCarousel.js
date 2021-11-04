@@ -17,7 +17,7 @@ function SetCarousel({
       },
     },
   ],
-  getCurrentCard,
+  getCurrentCard = () => {},
 }) {
   const [flag, setFlag] = useState(0);
   const [flip, setFlip] = useState(true);
