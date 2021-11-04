@@ -112,7 +112,7 @@ export const signInWithGoogle = createAsyncThunk(
   }
 );
 
-export const signOut = createAsyncThunk("user/signOut", async (thunkapi) => {
+export const signOut = createAsyncThunk("user/signOut", async (_, thunkapi) => {
   try {
     const { getFirebase } = thunkapi.extra;
     const firebase = getFirebase();
