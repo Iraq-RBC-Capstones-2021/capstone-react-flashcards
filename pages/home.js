@@ -25,12 +25,8 @@ export default function Home() {
     dispatch(getRecentSets());
     dispatch(getSuggestedSets());
     dispatch(getPopularSets());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
-  // const popularSets = data.Popular;
-  // const latestSets = data.Latest;
-  // const suggestedSets = data.Suggested;
   const topCategories = data.top_categories;
 
   const allSets = (set) => {
@@ -42,8 +38,8 @@ export default function Home() {
           description={set.description}
           title={set.title}
           cardCount={set.cardCount}
-          //   imageUrl={set.imageUrl}
-          //   avatar={set.avatar}
+          imageUrl={set.imageUrl}
+          avatar={set.avatar}
           tags={set.tags}
           setId={set.setId}
           userId={set.userId}
