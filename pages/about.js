@@ -1,4 +1,3 @@
-import Section from "../components/Section";
 import UserCard from "../components/UserCard";
 import data from "../users.json";
 
@@ -11,20 +10,16 @@ export default function About() {
         key={user.id}
         title={user.title}
         description={user.description}
-        facebook={user.facebook}
-        twitter={user.twitter}
-        google={user.google}
+        imageUrl={user.imageUrl}
       />
     );
   };
 
   return (
     <div className="px-32">
-      <Section
-        title="About Us"
-        desc="Body placeholder for text paragraph. A paragraph is a self-contained unit of text dealing with a particular point or idea."
-        image="/assets/placeholder_img.png"
-      />
+      <div className="flex justify-center items-center h-20">
+        <h1 className="text-center text-2xl ">Our Team</h1>
+      </div>
       <div className="grid gap-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 border-t-2 text-gray justify-items-center">
         {allUsers.map(all)}
       </div>
@@ -58,4 +53,3 @@ export default function About() {
     </div>
   );
 }
-
