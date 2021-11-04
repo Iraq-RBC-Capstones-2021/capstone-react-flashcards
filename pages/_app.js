@@ -9,6 +9,8 @@ import {
   getCards,
   getMineSets,
 } from "../store/sets/setsSlice";
+import { auth } from "../firebase";
+import { checkCurrentUser } from "../store/user/userSlice";
 import { wrapper } from "../store";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
@@ -34,6 +36,15 @@ const App = ({ Component, pageProps }) => {
       dispatch(getMineSets(user.uid));
     }
   }, [libraryInfoIds, dispatch, user]);
+
+  useEffect(() => {
+    const sub = auth.onAuthStateChanged((currentUser) => {
+      if (currentUser) {
+        dispatch(checkCurrentUser(currentUser));
+      }
+    });
+    return sub;
+  }, [dispatch]);
 
   return (
     <>
