@@ -217,8 +217,6 @@ export default function CreateCard() {
     }
   }, [userInfo, router]);
 
-  if (pageStatus === "loading") return <h1>Loading....</h1>;
-
   if (pageStatus === "error") setFeedbackMessage("Something Went Wrong");
 
   return (
