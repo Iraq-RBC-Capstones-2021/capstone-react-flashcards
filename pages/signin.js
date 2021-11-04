@@ -107,7 +107,7 @@ const Signin = () => {
               </form>
               {/** link to sign up page */}
               <Link href="/register">
-                <a className="inline-block text-grey hover:underline mt-2 mb-4 w-full sm:mb-3">
+                <a className="inline-block text-black text-opacity-40 hover:underline mt-2 mb-4 w-full sm:mb-3">
                   {" "}
                   Don`t Have an Account ? Sign up
                 </a>

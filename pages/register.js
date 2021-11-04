@@ -122,7 +122,7 @@ const Signup = () => {
 
               {/** link to sign up page */}
               <Link href="/signin">
-                <a className="inline-block text-grey hover:underline mt-5 w-full sm:mb-3">
+                <a className="inline-block text-black text-opacity-40 hover:underline mt-5 w-full sm:mb-3">
                   {" "}
                   Already Have an Account? Sign In
                 </a>
