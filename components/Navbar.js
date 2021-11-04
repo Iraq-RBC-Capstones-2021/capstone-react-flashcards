@@ -1,16 +1,19 @@
 import Link from "next/link";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image";
 
 import Search from "./Search";
 import data from "../sets.js";
+import { signOut } from "../store/user/userSlice";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  const [categoryIsHovered, setCategoryIsHovered] = useState(false);
+  const [userImageIsHovered, setUserImageIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
+  const dispatch = useDispatch();
   const userData = useSelector((state) => state.user.data);
 
   let Avatar = "/assets/Avatar.png";
@@ -95,8 +98,8 @@ function Navbar() {
           </Link>
           <div
             className="relative"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            onMouseEnter={() => setCategoryIsHovered(true)}
+            onMouseLeave={() => setCategoryIsHovered(false)}
           >
             <a className="inline-flex items-center py-1.5 px-2 hover:bg-grey rounded-lg transition duration-300 space-x-1.5">
               <div>Categories</div>
@@ -113,7 +116,7 @@ function Navbar() {
                 />
               </svg>
             </a>
-            {isHovered && (
+            {categoryIsHovered && (
               <div className="absolute -right-32 flex bg-white shadow-md rounded-lg p-2 text-center transition duration-300 z-10">
                 {data.top_categories.map((category) => (
                   <div key={category.name} className="">
@@ -183,7 +186,28 @@ function Navbar() {
                 fill="#1A1A1A"
               />
             </svg>
-            {photo()}
+            <div
+              className="relative"
+              onMouseEnter={() => setUserImageIsHovered(true)}
+              onMouseLeave={() => setUserImageIsHovered(false)}
+            >
+              {photo()}
+              {userImageIsHovered && (
+                <div className="absolute right-0 flex-col bg-white shadow-md rounded-lg p-2 text-center transition duration-300 z-10">
+                  <Link href={`/profile/${userData.uid}`}>
+                    <a className="block px-4 py-1 rounded-lg hover:bg-grey transition duration-300">
+                      Profile
+                    </a>
+                  </Link>
+                  <hr />
+                  <button onClick={() => dispatch(signOut())}>
+                    <a className="block px-4 py-1 rounded-lg hover:bg-grey transition duration-300">
+                      Logout
+                    </a>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
