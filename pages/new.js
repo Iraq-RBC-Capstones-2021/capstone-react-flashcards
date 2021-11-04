@@ -10,6 +10,7 @@ import {
   createNewCard,
   getTotalSets,
 } from "../store/sets/setsSlice";
+import Loading from "../components/Loading";
 
 export default function CreateCard() {
   const dispatch = useDispatch();
@@ -206,57 +207,61 @@ export default function CreateCard() {
     dispatch(getTotalSets());
   }, [dispatch, sets]);
 
-  if (pageStatus === "loading") return <h1>Loading....</h1>;
-
   if (pageStatus === "error") setFeedbackMessage("Something Went Wrong");
 
   return (
-    <div className="px-32 flex flex-col justify-between">
-      <div className=" mt-10 mb-32 h-60">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold ml-2">
-            {isNewSet ? "New Set" : "Choose From Current Sets"}
-          </h2>
-          <button
-            className="btn-primary"
-            onClick={() => setIsNewSet((prev) => !prev)}
-          >
-            {isNewSet ? "Cancel" : "+ New Set"}
-          </button>
-        </div>
-        <div className="m-2">
-          {isNewSet ? (
-            <NewSetForm onSetInfoSubmit={handleNewSetInfo} />
-          ) : (
-            <SetSelect
-              onSelect={handleSetSelect}
-              setsList={sets}
-              searchValue={searchValueSet}
-              onSearchValueChange={handleSearchValueSet}
-            />
+    <>
+      {pageStatus === "loading" ? (
+        <Loading />
+      ) : (
+        <div className="px-32 flex flex-col justify-between">
+          <div className=" mt-10 mb-32 h-60">
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-bold ml-2">
+                {isNewSet ? "New Set" : "Choose From Current Sets"}
+              </h2>
+              <button
+                className="btn-primary"
+                onClick={() => setIsNewSet((prev) => !prev)}
+              >
+                {isNewSet ? "Cancel" : "+ New Set"}
+              </button>
+            </div>
+            <div className="m-2">
+              {isNewSet ? (
+                <NewSetForm onSetInfoSubmit={handleNewSetInfo} />
+              ) : (
+                <SetSelect
+                  onSelect={handleSetSelect}
+                  setsList={sets}
+                  searchValue={searchValueSet}
+                  onSearchValueChange={handleSearchValueSet}
+                />
+              )}
+            </div>
+          </div>
+
+          {feedbackMessage && (
+            <h5 className="text-xl mb-5 text-primary">{feedbackMessage}</h5>
           )}
+
+          <Attachments
+            front={frontContent}
+            back={backContent}
+            onFileRemove={handleFileRemove}
+          />
+
+          <CardEditors
+            frontContent={frontContent}
+            backContent={backContent}
+            onContentChange={handleCardTextChange}
+            onContentSwitch={handleCardSwitch}
+            onFileChange={handleCardFileChange}
+            onSubmit={handleCreateCard}
+            submitTitle="Create Flash Card"
+          />
         </div>
-      </div>
-
-      {feedbackMessage && (
-        <h5 className="text-xl mb-5 text-primary">{feedbackMessage}</h5>
       )}
-
-      <Attachments
-        front={frontContent}
-        back={backContent}
-        onFileRemove={handleFileRemove}
-      />
-
-      <CardEditors
-        frontContent={frontContent}
-        backContent={backContent}
-        onContentChange={handleCardTextChange}
-        onContentSwitch={handleCardSwitch}
-        onFileChange={handleCardFileChange}
-        onSubmit={handleCreateCard}
-        submitTitle="Create Flash Card"
-      />
-    </div>
+    </>
   );
 }
