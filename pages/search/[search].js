@@ -13,8 +13,6 @@ export default function Search() {
   const totalSets = useSelector((state) => state.sets.data.total);
   const results = totalSets; // assuming replace with redux functionality or api calls
 
-  console.log(totalSets);
-
   const [filteredResults, setFilteredResults] = useState(results);
   const [resultsPerPage, setResultsPerPage] = useState(9);
   const [biggestCardCount] = useState(() => {
