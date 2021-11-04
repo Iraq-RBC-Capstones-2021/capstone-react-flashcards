@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useSelector } from "react-redux";
 import Image from "next/image";
 import Card from "../../components/Card";
 import { Range } from "rc-slider";
@@ -8,13 +9,15 @@ import "rc-slider/assets/index.css";
 export default function Search() {
   const router = useRouter();
   const { search } = router.query;
-  const results = fakeResults; // assuming replace with redux functionality or api calls
+
+  const totalSets = useSelector((state) => state.sets.data.total);
+  const results = totalSets; // assuming replace with redux functionality or api calls
 
   const [filteredResults, setFilteredResults] = useState(results);
   const [resultsPerPage, setResultsPerPage] = useState(9);
   const [biggestCardCount] = useState(() => {
-    const newArray = filteredResults.sort((a, b) => a.cardCount - b.cardCount);
-    return newArray[newArray.length - 1].cardCount;
+    //const newArray = filteredResults.sort((a, b) => a.cardCount - b.cardCount);
+    //return newArray[newArray.length - 1].cardCount;
   });
   const [filters, setFilters] = useState({
     filtered: false,
@@ -167,17 +170,27 @@ export default function Search() {
             Search results for &quot;<strong>{search}</strong>&quot; :
           </p>
           <div className=" pt-4 grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-x-px gap-y-8">
-            {!filteredResults || filteredResults.length === 0 ? (
+            {!totalSets || totalSets.length === 0 ? (
               <NoResults message={search} />
             ) : null}
-            {filteredResults.slice(0, resultsPerPage).map((cardInfo, index) => {
-              return (
-                <div className=" max-w-xs" key={index}>
-                  {" "}
-                  <Card {...cardInfo} />
-                </div>
-              );
-            })}
+            {totalSets
+              .filter((set) => {
+                return (
+                  set.title.toLowerCase().includes(search) ||
+                  set.tags.includes(search) ||
+                  (set.description &&
+                    set.description.toLowerCase().includes(search))
+                );
+              })
+              .slice(0, resultsPerPage)
+              .map((cardInfo, index) => {
+                return (
+                  <div className=" max-w-xs" key={index}>
+                    {" "}
+                    <Card {...cardInfo} />
+                  </div>
+                );
+              })}
           </div>
           <div className="col-span-full flex content-center items-center justify-center my-8">
             <button

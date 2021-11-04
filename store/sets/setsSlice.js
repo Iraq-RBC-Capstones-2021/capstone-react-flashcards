@@ -8,6 +8,10 @@ const initialState = {
     recent: [],
     cards: [],
     libraryInfoIds: [],
+    setDetails: {
+      set: {},
+      cards: [],
+    },
     total: [],
     profile: {
       userInfo: null,
@@ -180,8 +184,8 @@ export const getPopularSets = createAsyncThunk(
       sets.push({ ...data, setId: doc.id });
     });
     return sets;
-  })
-
+  }
+);
 export const addSetToLibrary = createAsyncThunk(
   "sets/addSetToLibrary",
   async (setId, thunkapi) => {
@@ -295,6 +299,27 @@ export const getTotalSets = createAsyncThunk(
   }
 );
 
+export const getCards = createAsyncThunk(
+  "sets/getCards",
+  async (_, thunkapi) => {
+    const { getFirestore } = thunkapi.extra;
+    const firestore = getFirestore();
+
+    const collection = await firestore.get({
+      collection: "cards",
+    });
+
+    const cards = [];
+
+    collection.forEach((doc) => {
+      const data = doc.data();
+      cards.push({ ...data, cardId: doc.id });
+    });
+
+    return cards;
+  }
+);
+
 const setsSlice = createSlice({
   name: "sets",
   initialState,
@@ -313,6 +338,18 @@ const setsSlice = createSlice({
       );
 
       state.data.mine = [...library, ...setsCreatedByUser];
+    },
+    getSetDetails(state, action) {
+      const totalSets = state.data.total;
+      const totalCards = state.data.cards;
+      const setId = action.payload;
+
+      state.status = "loading";
+      state.data.setDetails.set = totalSets.find((set) => set.setId === setId);
+      state.data.setDetails.cards = totalCards.filter(
+        (card) => card.setId === setId
+      );
+      state.status = "idle";
     },
   },
   extraReducers: {
@@ -425,9 +462,19 @@ const setsSlice = createSlice({
     [getTotalSets.rejected]: (state) => {
       state.status = "error";
     },
+    [getCards.pending]: (state) => {
+      state.status = "loading";
+    },
+    [getCards.fulfilled]: (state, action) => {
+      state.data.cards = action.payload;
+      state.status = "idle";
+    },
+    [getCards.rejected]: (state) => {
+      state.status = "error";
+    },
   },
 });
 
-export const { getMineSets } = setsSlice.actions;
+export const { getMineSets, getSetDetails } = setsSlice.actions;
 
 export default setsSlice;
