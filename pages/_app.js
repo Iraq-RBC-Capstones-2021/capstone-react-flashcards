@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Head from "next/head";
 import "swiper/css/bundle";
 
-import { getLibraryInfoIds, getTotalSets } from "../store/sets/setsSlice";
+import {
+  getLibraryInfoIds,
+  getTotalSets,
+  getCards,
+} from "../store/sets/setsSlice";
 import { wrapper } from "../store";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
@@ -20,6 +24,7 @@ const App = ({ Component, pageProps }) => {
 
   useEffect(() => {
     dispatch(getTotalSets());
+    dispatch(getCards());
   }, [dispatch]);
 
   return (

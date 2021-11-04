@@ -62,7 +62,7 @@ export default function Card({
             className="flex flex-col  px-4 pt-4 pb-1 rounded-tl-3xl
             "
           >
-            <Link href={`/sets/${setId}`} passHref>
+            <Link href={`/setpage/${setId}`} passHref>
               <h1
                 className={`cursor-pointer text-lg md:text-2xl ${
                   title.length >= 25 ? "group-hover:animate-marquee" : ""
