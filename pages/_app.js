@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Head from "next/head";
 import "swiper/css/bundle";
 
+import { auth } from "../firebase";
+import { checkCurrentUser } from "../store/user/userSlice";
 import {
   getLibraryInfoIds,
   getTotalSets,
@@ -27,6 +29,15 @@ const App = ({ Component, pageProps }) => {
   useEffect(() => {
     dispatch(getTotalSets());
     dispatch(getCards());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const sub = auth.onAuthStateChanged((currentUser) => {
+      if (currentUser) {
+        dispatch(checkCurrentUser(currentUser));
+      }
+    });
+    return sub;
   }, [dispatch]);
 
   useEffect(() => {
