@@ -35,7 +35,7 @@ export default function Home() {
             titleIcon={Star}
             desc="Start by creating customizable flashcards or you can browse flashcards in any subject and find what you want. Then, start studying."
             isVideo={false}
-            image="/assets/cards-set.png"
+            image="/assets/cards_set_preview.png"
           />
         </div>
 
@@ -45,7 +45,7 @@ export default function Home() {
             titleIcon={Star}
             desc="Are you a visual or auditory learner? Add images and sounds for the flashcards to improve your learning."
             isVideo={false}
-            image="/assets/image-and-sounds.png"
+            image="/assets/Flash-Card.png"
             reverse
           />
         </div>
@@ -56,7 +56,7 @@ export default function Home() {
             titleIcon={Star}
             desc="Seeing how well you do, gives you a real boost. With an extensive set of statistical evaluations, you can see how well you performed at any time . "
             isVideo={false}
-            image="/assets/progress.png"
+            image="/assets/progress.jpg"
           />
         </div>
       </div>
