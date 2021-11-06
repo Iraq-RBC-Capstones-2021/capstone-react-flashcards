@@ -34,15 +34,6 @@ export default function Footer() {
               <Link href="/">
                 <a className="px-4">Home</a>
               </Link>
-              <Link href="/categories">
-                <a className="px-4">Categories</a>
-              </Link>
-              <Link href="/profile">
-                <a className="px-4">Profile</a>
-              </Link>
-              <Link href="/developers">
-                <a className="px-4">Developers</a>
-              </Link>
               <Link href="/about">
                 <a className="px-4">About</a>
               </Link>
